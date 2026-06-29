@@ -4,26 +4,35 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>七處徵心 · Where Is the Mind? — 楞嚴經互動遊戲</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=LXGW+WenKai+TC:wght@400;700&display=swap" rel="stylesheet">
 <style>
   :root{
-    --navy:#0a0e24; --navy2:#131a40; --navy3:#1d2552;
-    --gold:#d4af37; --gold-light:#f3e0a3; --gold-deep:#9c7a1e;
-    --ink:#ede6cf; --ink-soft:#b9b08f;
-    --panel:rgba(18,24,58,.82); --panel-line:rgba(212,175,55,.45);
-    --ok:#5fd08a; --no:#e0736a;
+    --cream:#fff8ef; --cream2:#ffeede; --peach:#ffe1cf;
+    --paper:#ffffff;
+    --pink:#f59bb6; --pink-deep:#e87399;
+    --gold:#f5bb52; --gold-deep:#d9962a;
+    --jade:#74c6a0; --jade-deep:#3fa377;
+    --coral:#f4897a; --coral-deep:#e3604f;
+    --sky:#8fc8ec; --sky-deep:#5aa7d6;
+    --ink:#5b4a40; --ink-soft:#a3938a;
+    --line:#f0dcc8;
   }
   *{box-sizing:border-box; margin:0; padding:0;}
   html,body{height:100%;}
   body{
-    font-family:"Noto Serif TC","Songti TC","STSong","PMingLiU",serif;
-    color:var(--ink);
-    background:radial-gradient(ellipse at 50% -10%, #28306e 0%, var(--navy2) 34%, var(--navy) 72%, #05070f 100%) fixed;
+    font-family:"LXGW WenKai TC","YuanTi TC","Yuanti TC","PingFang TC","Noto Sans TC","Microsoft JhengHei",sans-serif;
+    color:var(--ink); font-size:16px; line-height:1.85;
+    background:radial-gradient(ellipse at 50% -8%, #fff9f2 0%, var(--cream) 38%, var(--cream2) 76%, var(--peach) 100%) fixed;
     min-height:100%; display:flex; flex-direction:column; align-items:center;
-    padding:22px 16px 56px; position:relative; overflow-x:hidden;
+    padding:24px 16px 56px; position:relative; overflow-x:hidden;
   }
-  .stars{position:fixed; inset:0; pointer-events:none; z-index:0;}
-  .stars i{position:absolute; background:#fff; border-radius:50%; opacity:.8; animation:tw 3s ease-in-out infinite;}
-  @keyframes tw{0%,100%{opacity:.15;}50%{opacity:.9;}}
+  /* 飄落花瓣 */
+  .stars{position:fixed; inset:0; pointer-events:none; z-index:0; overflow:hidden;}
+  .stars i{position:absolute; bottom:-30px; width:14px; height:14px;
+    border-radius:60% 60% 60% 0; opacity:.55; animation:floatup linear infinite;}
+  @keyframes floatup{to{transform:translateY(-118vh) rotate(160deg); opacity:0;}}
 
   .wrap{width:100%; max-width:640px; position:relative; z-index:1; text-align:center;}
 
@@ -32,140 +41,150 @@
   body.lang-en .zh{display:none!important;}
 
   /* 頁首 */
-  .temple{color:var(--gold-light); letter-spacing:.55em; font-size:14px; text-indent:.55em; margin-bottom:10px; text-shadow:0 0 14px rgba(212,175,55,.5);}
-  h1{color:#fff; font-size:32px; font-weight:700; line-height:1.4; text-shadow:0 0 20px rgba(120,140,255,.4);}
-  h1 .grad{background:linear-gradient(90deg,#f3e0a3,#d4af37 50%,#f3e0a3); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent;}
-  h1 .sm{display:block; font-size:15px; color:var(--gold-light); letter-spacing:.18em; margin-top:8px; font-weight:400; -webkit-text-fill-color:initial;}
-  .lead{color:var(--ink-soft); font-size:14.5px; margin-top:16px; line-height:1.9;}
+  .temple{color:var(--pink-deep); letter-spacing:.4em; font-size:14px; text-indent:.4em; margin-bottom:8px; font-weight:700;}
+  h1{color:#6b4a3a; font-size:36px; font-weight:700; line-height:1.3;}
+  h1 .grad{background:linear-gradient(90deg,var(--pink-deep),var(--gold-deep) 55%,var(--pink-deep));
+    -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent;}
+  h1 .sm{display:block; font-size:16px; color:var(--gold-deep); letter-spacing:.06em; margin-top:8px; font-weight:400; -webkit-text-fill-color:initial;}
+  .lead{color:var(--ink); font-size:16px; margin-top:16px; line-height:2;}
   .lead .zh{display:block;}
-  .lead .en{display:block; margin-top:10px; color:#9c9576;}
-  .lead .q{display:block; color:var(--gold-light); font-size:16px; margin-top:8px; letter-spacing:.04em;}
+  .lead .en{display:block; margin-top:10px; color:var(--ink-soft); font-size:15px;}
 
   /* 控制列 */
-  .topbar{display:flex; justify-content:center; gap:8px; flex-wrap:wrap; margin:18px 0 4px;}
-  .seg{display:inline-flex; border:1px solid var(--panel-line); border-radius:24px; overflow:hidden; background:rgba(8,12,30,.5);}
+  .topbar{display:flex; justify-content:center; gap:8px; flex-wrap:wrap; margin:20px 0 4px;}
+  .seg{display:inline-flex; border:2px solid var(--line); border-radius:30px; overflow:hidden; background:var(--paper); box-shadow:0 3px 10px rgba(220,150,90,.12);}
   .seg button{appearance:none; border:none; background:transparent; color:var(--ink-soft); font-family:inherit;
-    font-size:13px; letter-spacing:.06em; padding:7px 15px; cursor:pointer; transition:.15s;}
-  .seg button.on{background:rgba(212,175,55,.22); color:var(--gold-light);}
-  .seg button:not(.on):hover{color:var(--ink);}
+    font-size:15px; letter-spacing:.04em; padding:8px 18px; cursor:pointer; transition:.15s; font-weight:700;}
+  .seg button.on{background:linear-gradient(180deg,var(--pink),var(--pink-deep)); color:#fff;}
+  .seg button:not(.on):hover{color:var(--pink-deep);}
 
   /* 按鈕 */
-  .btn{appearance:none; border:none; cursor:pointer; font-family:inherit;
-    background:linear-gradient(180deg,var(--gold-light),var(--gold) 55%,var(--gold-deep));
-    color:#3a2a05; font-weight:700; font-size:17px; letter-spacing:.16em; text-indent:.16em; padding:13px 34px;
-    border-radius:40px; box-shadow:0 6px 20px rgba(0,0,0,.45), 0 0 18px rgba(212,175,55,.3), inset 0 1px 0 #fff6d8;
-    transition:transform .15s; border:1.5px solid #fff2cf;}
-  .btn:hover{transform:translateY(-2px);} .btn:active{transform:translateY(1px);}
-  .btn.ghost{background:transparent; color:var(--gold-light); border:1.5px solid var(--gold); box-shadow:none; font-size:15px; padding:11px 26px; font-weight:600;}
-  .btn.ghost:hover{background:rgba(212,175,55,.14);}
-  .btn[disabled]{opacity:.45; cursor:default; transform:none;}
-  .modebtns{display:flex; gap:16px; justify-content:center; flex-wrap:wrap; margin-top:26px;}
-  .modebtns .btn{display:flex; flex-direction:column; gap:5px; min-width:210px; padding:18px 24px; line-height:1.4;}
-  .modebtns .btn small{font-size:12.5px; font-weight:400; letter-spacing:.02em; text-indent:0; opacity:.85;}
+  .btn{appearance:none; border:none; cursor:pointer; font-family:inherit; font-weight:700;
+    background:linear-gradient(180deg,#ffd27a,var(--gold) 55%,var(--gold-deep));
+    color:#7a4a16; font-size:19px; letter-spacing:.1em; text-indent:.1em; padding:14px 38px;
+    border-radius:40px; box-shadow:0 6px 0 #e0a23c, 0 10px 18px rgba(221,154,42,.3);
+    transition:transform .12s, box-shadow .12s;}
+  .btn:hover{transform:translateY(-2px); box-shadow:0 8px 0 #e0a23c, 0 14px 22px rgba(221,154,42,.34);}
+  .btn:active{transform:translateY(4px); box-shadow:0 2px 0 #e0a23c, 0 4px 10px rgba(221,154,42,.3);}
+  .btn.ghost{background:var(--paper); color:var(--pink-deep); border:2px solid var(--pink);
+    box-shadow:0 4px 0 #f3b9c8, 0 8px 14px rgba(232,115,153,.18); font-size:16px; padding:12px 28px;}
+  .btn.ghost:hover{background:#fff2f6;}
+  .btn[disabled]{opacity:.5; cursor:default; transform:none; box-shadow:none;}
+  .modebtns{display:flex; gap:16px; justify-content:center; flex-wrap:wrap; margin-top:24px;}
+  .modebtns .btn{display:flex; flex-direction:column; gap:4px; min-width:210px; padding:18px 24px; line-height:1.5;}
+  .modebtns .btn .ico{font-size:30px; line-height:1;}
+  .modebtns .btn small{font-size:13px; font-weight:400; letter-spacing:.01em; text-indent:0; color:#8a5a2a;}
+  .modebtns .btn.teach{background:linear-gradient(180deg,#bfe6d2,var(--jade) 55%,var(--jade-deep)); color:#1f5e44; box-shadow:0 6px 0 #4ba37e,0 10px 18px rgba(63,163,119,.28);}
+  .modebtns .btn.teach:hover{box-shadow:0 8px 0 #4ba37e,0 14px 22px rgba(63,163,119,.32);}
+  .modebtns .btn.teach:active{box-shadow:0 2px 0 #4ba37e,0 4px 10px rgba(63,163,119,.3);}
+  .modebtns .btn.teach small{color:#2c7556;}
 
   /* 卡面板 */
-  .card{display:none; background:var(--panel); border:1.5px solid var(--panel-line); border-radius:18px;
-    box-shadow:0 16px 44px rgba(0,0,0,.55), inset 0 0 32px rgba(40,55,120,.28);
-    padding:22px 20px 24px; margin-top:18px; text-align:left;
-    -webkit-backdrop-filter:blur(6px); backdrop-filter:blur(6px);}
-  .card.show{display:block; animation:fadeUp .5s ease;}
-  @keyframes fadeUp{from{opacity:0; transform:translateY(16px);}to{opacity:1; transform:translateY(0);}}
+  .card{display:none; background:var(--paper); border:2px solid var(--line); border-radius:26px;
+    box-shadow:0 12px 30px rgba(214,150,98,.16);
+    padding:24px 22px 26px; margin-top:20px; text-align:left;}
+  .card.show{display:block; animation:pop .45s cubic-bezier(.34,1.56,.64,1);}
+  @keyframes pop{from{opacity:0; transform:translateY(16px) scale(.97);}to{opacity:1; transform:translateY(0) scale(1);}}
 
   /* 進度蓮位 */
-  .progress{display:flex; justify-content:center; gap:7px; margin-bottom:6px; flex-wrap:wrap;}
-  .progress .dot{width:26px; height:26px; border-radius:50%; display:flex; align-items:center; justify-content:center;
-    font-size:13px; color:var(--ink-soft); border:1px solid rgba(212,175,55,.35); background:rgba(8,12,30,.5); transition:.2s;}
-  .progress .dot.cur{border-color:var(--gold); color:#3a2a05; background:linear-gradient(180deg,var(--gold-light),var(--gold)); box-shadow:0 0 12px rgba(212,175,55,.55);}
-  .progress .dot.done{color:var(--no); border-color:rgba(224,115,106,.6);}
+  .progress{display:flex; justify-content:center; gap:8px; margin-bottom:4px; flex-wrap:wrap;}
+  .progress .dot{width:30px; height:30px; border-radius:50%; display:flex; align-items:center; justify-content:center;
+    font-size:14px; font-weight:700; color:var(--ink-soft); border:2px solid var(--line); background:#fff; transition:.2s;}
+  .progress .dot.cur{border-color:var(--gold-deep); color:#fff; background:linear-gradient(180deg,var(--gold),var(--gold-deep)); transform:scale(1.12); box-shadow:0 4px 10px rgba(221,154,42,.35);}
+  .progress .dot.done{color:var(--jade-deep); border-color:var(--jade); background:#e7f6ef;}
 
-  .place-h{display:flex; align-items:baseline; gap:10px; margin:14px 2px 2px; flex-wrap:wrap;}
-  .place-h .num{font-size:13px; letter-spacing:.18em; color:var(--gold); white-space:nowrap;}
-  .place-h .nm{font-size:22px; font-weight:700; color:#fff;}
-  .place-h .nm .en{display:block; font-size:14px; color:var(--gold-light); font-weight:400; letter-spacing:.02em; margin-top:2px;}
+  .place-h{display:flex; align-items:baseline; gap:10px; margin:14px 2px 2px; flex-wrap:wrap; justify-content:center;}
+  .place-h .num{font-size:14px; letter-spacing:.1em; color:var(--pink-deep); white-space:nowrap; font-weight:700;
+    background:#ffeef3; padding:3px 12px; border-radius:20px;}
+  .place-h .nm{font-size:25px; font-weight:700; color:#6b4a3a; width:100%; text-align:center; margin-top:4px;}
+  .place-h .nm .en{display:block; font-size:15px; color:var(--gold-deep); font-weight:400; letter-spacing:.02em; margin-top:2px;}
 
-  .sutra{margin:12px 0 4px; padding:9px 13px; border-left:3px solid var(--gold-deep); background:rgba(8,12,30,.45);
-    border-radius:0 8px 8px 0; font-size:14px; color:var(--gold-light); line-height:1.85; letter-spacing:.03em;}
-  .sutra b{font-size:11.5px; letter-spacing:.22em; color:var(--gold); display:inline-block; margin-right:8px; vertical-align:1px;}
+  .sutra{margin:14px 0 4px; padding:11px 16px; background:#fff6ea; border:1.5px solid #f6e0c2;
+    border-radius:16px; font-size:15px; color:#9a6a2a; line-height:1.9; text-align:center;}
+  .sutra b{font-size:12px; letter-spacing:.14em; color:#fff; background:var(--gold-deep); display:inline-block;
+    margin-right:8px; padding:2px 10px; border-radius:12px; vertical-align:2px;}
 
-  .who{display:flex; gap:9px; align-items:flex-start; margin-top:14px;}
-  .who .ava{flex:0 0 auto; width:34px; height:34px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:18px;
-    background:rgba(120,140,210,.18); border:1px solid rgba(120,140,210,.5);}
-  .who.buddha .ava{background:rgba(212,175,55,.18); border-color:var(--gold);}
-  .who .bubble{flex:1; background:rgba(8,12,30,.5); border:1px solid rgba(120,140,210,.3); border-radius:12px; padding:11px 14px;}
-  .who.buddha .bubble{border-color:rgba(212,175,55,.35);}
-  .who .role{font-size:12px; letter-spacing:.14em; color:var(--ink-soft); margin-bottom:5px;}
-  .who.buddha .role{color:var(--gold);}
-  .who .txt{font-size:15px; line-height:1.95;}
-  .who .txt .en{display:block; color:var(--ink-soft); font-size:13.5px; margin-top:6px; line-height:1.8;}
+  .who{display:flex; gap:10px; align-items:flex-start; margin-top:16px;}
+  .who .ava{flex:0 0 auto; width:42px; height:42px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:22px;
+    background:#e6f2fb; border:2px solid var(--sky);}
+  .who.buddha .ava{background:#fff3df; border-color:var(--gold);}
+  .who .bubble{flex:1; position:relative; background:#eef7fd; border:2px solid #cfe8f8; border-radius:18px; border-top-left-radius:4px; padding:13px 16px;}
+  .who.buddha .bubble{background:#fff7eb; border-color:#f6e2bd;}
+  .who .role{font-size:13px; letter-spacing:.08em; color:var(--sky-deep); margin-bottom:5px; font-weight:700;}
+  .who.buddha .role{color:var(--gold-deep);}
+  .who .txt{font-size:16.5px; line-height:2;}
+  .who .txt .en{display:block; color:var(--ink-soft); font-size:14.5px; margin-top:7px; line-height:1.85;}
 
   /* 討論 / 提示 */
-  .discuss{margin-top:15px; text-align:center; color:var(--gold-light); font-size:14.5px; letter-spacing:.04em; line-height:1.8;
-    padding:11px; border:1px dashed rgba(212,175,55,.4); border-radius:12px; background:rgba(212,175,55,.05);}
-  .discuss .en{display:block; color:var(--ink-soft); font-size:13px; margin-top:4px;}
+  .discuss{margin-top:16px; text-align:center; color:#2c7556; font-size:16px; letter-spacing:.02em; line-height:1.9;
+    padding:13px; border:2px dashed var(--jade); border-radius:18px; background:#eef9f3; font-weight:700;}
+  .discuss .en{display:block; color:#5a9b80; font-size:14px; margin-top:4px; font-weight:400;}
 
   /* 選項 */
-  .q-stem{margin-top:15px; font-size:15.5px; color:#fff; line-height:1.8; text-align:center;}
-  .q-stem .en{display:block; color:var(--gold-light); font-size:13.5px; margin-top:5px;}
-  .opts{display:flex; flex-direction:column; gap:11px; margin-top:14px;}
+  .q-stem{margin-top:18px; font-size:18px; color:#6b4a3a; line-height:1.7; text-align:center; font-weight:700;}
+  .q-stem .en{display:block; color:var(--gold-deep); font-size:14.5px; margin-top:5px; font-weight:400;}
+  .opts{display:flex; flex-direction:column; gap:12px; margin-top:16px;}
   .opt{appearance:none; cursor:pointer; font-family:inherit; text-align:left; width:100%;
-    background:rgba(8,12,30,.55); border:1.5px solid rgba(212,175,55,.28); border-radius:12px; padding:13px 15px;
-    color:var(--ink); transition:.15s; display:flex; gap:11px; align-items:flex-start;}
-  .opt:hover:not(:disabled){border-color:var(--gold); background:rgba(212,175,55,.1);}
+    background:#fff; border:2px solid var(--line); border-radius:18px; padding:14px 16px;
+    color:var(--ink); transition:.15s; display:flex; gap:12px; align-items:flex-start;
+    box-shadow:0 3px 0 #f0dcc8;}
+  .opt:hover:not(:disabled){border-color:var(--pink); background:#fff6f9; transform:translateY(-1px); box-shadow:0 4px 0 #f3b9c8;}
   .opt:disabled{cursor:default;}
-  .opt .pick{flex:0 0 auto; width:24px; height:24px; border-radius:50%; border:1.5px solid var(--gold-deep); color:var(--gold-light);
-    display:flex; align-items:center; justify-content:center; font-size:13px; font-weight:700;}
-  .opt .ot{flex:1; font-size:14.5px; line-height:1.8;}
-  .opt .ot .en{display:block; color:var(--ink-soft); font-size:13px; margin-top:4px; line-height:1.7;}
-  .opt.correct{border-color:var(--ok); background:rgba(95,208,138,.13);}
-  .opt.correct .pick{background:var(--ok); border-color:var(--ok); color:#06301a;}
-  .opt.wrong{border-color:var(--no); background:rgba(224,115,106,.12);}
-  .opt.wrong .pick{background:var(--no); border-color:var(--no); color:#3a0d09;}
+  .opt .pick{flex:0 0 auto; width:30px; height:30px; border-radius:50%; border:2px solid var(--gold); color:var(--gold-deep);
+    display:flex; align-items:center; justify-content:center; font-size:15px; font-weight:700; background:#fff7e9;}
+  .opt .ot{flex:1; font-size:15.5px; line-height:1.85; padding-top:2px;}
+  .opt .ot .en{display:block; color:var(--ink-soft); font-size:13.5px; margin-top:4px; line-height:1.7;}
+  .opt.correct{border-color:var(--jade-deep); background:#e9f8f0; box-shadow:0 3px 0 #b6e3cd;}
+  .opt.correct .pick{background:var(--jade-deep); border-color:var(--jade-deep); color:#fff;}
+  .opt.wrong{border-color:var(--coral-deep); background:#fdeeec; box-shadow:0 3px 0 #f6c4bc;}
+  .opt.wrong .pick{background:var(--coral-deep); border-color:var(--coral-deep); color:#fff;}
 
   /* 揭曉破斥 */
-  .reveal{display:none; margin-top:16px;}
-  .reveal.show{display:block; animation:fadeUp .45s ease;}
-  .verdict{text-align:center; margin:4px 0 12px;}
-  .verdict .stamp{display:inline-block; font-size:14px; letter-spacing:.1em; color:#3a0d09; font-weight:700;
-    background:linear-gradient(180deg,#eec0bb,#d98a82); border:1.5px solid #b85a52; border-radius:8px; padding:6px 16px;
-    transform:rotate(-3deg); box-shadow:0 3px 10px rgba(0,0,0,.4);}
-  .key{text-align:center; margin-top:12px; font-size:15px; color:var(--gold-light); letter-spacing:.05em; line-height:1.8;}
-  .key .en{display:block; color:var(--ink-soft); font-size:13px; margin-top:3px;}
+  .reveal{display:none; margin-top:18px;}
+  .reveal.show{display:block; animation:pop .45s cubic-bezier(.34,1.56,.64,1);}
+  .verdict{text-align:center; margin:6px 0 12px;}
+  .verdict .stamp{display:inline-block; font-size:16px; letter-spacing:.06em; color:#fff; font-weight:700;
+    background:linear-gradient(180deg,#f7a499,var(--coral-deep)); border-radius:30px; padding:8px 22px;
+    box-shadow:0 5px 12px rgba(227,96,79,.32);}
+  .key{text-align:center; margin-top:12px; font-size:17px; color:var(--pink-deep); letter-spacing:.02em; line-height:1.8; font-weight:700;}
+  .key .en{display:block; color:var(--ink-soft); font-size:14px; margin-top:3px; font-weight:400;}
 
-  .nav{display:flex; gap:12px; justify-content:center; margin-top:20px; flex-wrap:wrap;}
+  .nav{display:flex; gap:14px; justify-content:center; margin-top:22px; flex-wrap:wrap;}
 
   /* 結局 */
-  .final-h{font-size:26px; color:#fff; font-weight:700; text-align:center; margin-bottom:6px; text-shadow:0 0 20px rgba(212,175,55,.4);}
-  .final-h .en{display:block; font-size:14px; color:var(--gold-light); font-weight:400; letter-spacing:.06em; margin-top:6px;}
-  .score{text-align:center; margin:14px 0; font-size:16px; color:var(--gold-light);}
+  .final-h{font-size:30px; color:#6b4a3a; font-weight:700; text-align:center; margin-bottom:6px;}
+  .final-h .en{display:block; font-size:15px; color:var(--gold-deep); font-weight:400; letter-spacing:.04em; margin-top:6px;}
+  .score{text-align:center; margin:16px 0; font-size:18px; color:var(--gold-deep); font-weight:700;}
   .score .zh,.score .en{display:block;}
-  .score .en{font-size:14px; color:var(--ink-soft); margin-top:2px;}
-  .score b{font-size:30px; color:#fff;}
-  .truth{margin-top:14px; background:rgba(8,12,30,.55); border:1px solid rgba(212,175,55,.3); border-radius:12px; padding:16px 16px;
-    font-size:15px; line-height:2; color:var(--ink);}
-  .truth .en{display:block; color:var(--ink-soft); font-size:13.5px; margin-top:8px; line-height:1.85;}
-  .truth .hl{color:var(--gold-light); font-weight:700;}
-  .reflect{margin-top:14px;}
-  .reflect .rt{text-align:center; font-size:13px; letter-spacing:.22em; color:var(--gold); margin-bottom:10px;}
-  .reflect ol{list-style:none; counter-reset:r; display:flex; flex-direction:column; gap:10px;}
-  .reflect li{counter-increment:r; position:relative; padding:11px 14px 11px 46px; background:rgba(212,175,55,.06);
-    border:1px dashed rgba(212,175,55,.35); border-radius:12px; font-size:14.5px; line-height:1.8;}
-  .reflect li::before{content:counter(r); position:absolute; left:12px; top:11px; width:24px; height:24px; border-radius:50%;
-    background:rgba(212,175,55,.18); border:1px solid var(--gold); color:var(--gold-light); display:flex; align-items:center; justify-content:center; font-size:13px;}
-  .reflect li .en{display:block; color:var(--ink-soft); font-size:12.5px; margin-top:4px;}
+  .score .en{font-size:15px; color:var(--ink-soft); margin-top:2px; font-weight:400;}
+  .score b{font-size:34px; color:var(--pink-deep);}
+  .truth{margin-top:16px; background:#fff6ee; border:2px solid #f6e2c8; border-radius:20px; padding:18px 18px;
+    font-size:16px; line-height:2.05; color:var(--ink);}
+  .truth .en{display:block; color:var(--ink-soft); font-size:14.5px; margin-top:9px; line-height:1.9;}
+  .truth .hl{color:var(--pink-deep); font-weight:700;}
+  .reflect{margin-top:16px;}
+  .reflect .rt{text-align:center; font-size:15px; letter-spacing:.1em; color:var(--gold-deep); margin-bottom:10px; font-weight:700;}
+  .reflect ol{list-style:none; counter-reset:r; display:flex; flex-direction:column; gap:11px;}
+  .reflect li{counter-increment:r; position:relative; padding:13px 16px 13px 50px; background:#fff;
+    border:2px solid var(--line); border-radius:16px; font-size:15.5px; line-height:1.85; box-shadow:0 3px 0 #f0dcc8;}
+  .reflect li::before{content:counter(r); position:absolute; left:13px; top:12px; width:28px; height:28px; border-radius:50%;
+    background:linear-gradient(180deg,var(--pink),var(--pink-deep)); color:#fff; display:flex; align-items:center; justify-content:center; font-size:14px; font-weight:700;}
+  .reflect li .en{display:block; color:var(--ink-soft); font-size:13px; margin-top:4px;}
 
   /* 身像圖 */
-  .figure{display:flex; justify-content:center; margin:6px 0 2px;}
-  .figure svg{width:128px; height:150px;}
+  .figure{display:flex; justify-content:center; margin:8px 0 2px;}
+  .figure svg{width:150px; height:172px;}
 
-  footer{margin-top:30px; color:var(--ink-soft); opacity:.72; font-size:12px; line-height:1.9; text-align:center; max-width:560px;}
-  footer a{color:var(--gold-light); text-decoration:none; border-bottom:1px dotted var(--gold-deep);}
-  .kbd{color:var(--gold); opacity:.8; font-size:11.5px; letter-spacing:.04em; margin-top:8px;}
-  .printlink{display:inline-block; margin-top:14px; color:var(--gold-light); font-size:14px; text-decoration:none;
-    padding:8px 18px; border:1px solid var(--gold); border-radius:24px; background:rgba(212,175,55,.1); letter-spacing:.06em;}
-  .printlink:hover{background:rgba(212,175,55,.2);}
+  footer{margin-top:32px; color:var(--ink-soft); font-size:13px; line-height:1.95; text-align:center; max-width:560px;}
+  footer a{color:var(--pink-deep); text-decoration:none; border-bottom:2px dotted var(--pink); font-weight:700;}
+  .kbd{color:var(--gold-deep); font-size:13px; letter-spacing:.02em; margin-top:8px;}
+  .printlink{display:inline-block; margin-top:16px; color:var(--pink-deep); font-size:15px; text-decoration:none; font-weight:700;
+    padding:10px 22px; border:2px solid var(--pink); border-radius:30px; background:#fff; box-shadow:0 4px 0 #f3b9c8;}
+  .printlink:hover{background:#fff2f6; transform:translateY(-1px);}
 
   @media(max-width:480px){
-    h1{font-size:26px;} .place-h .nm{font-size:19px;}
+    body{font-size:16px;}
+    h1{font-size:29px;} .place-h .nm{font-size:21px;}
     .modebtns .btn{min-width:0; width:100%;}
   }
 </style>
@@ -177,12 +196,12 @@
 
   <!-- ===== 開場 ===== -->
   <section id="intro">
-    <div class="temple">寶 嚴 禪 寺 · 楞 嚴 經</div>
+    <div class="temple">🪷 寶 嚴 禪 寺 · 楞 嚴 經 🪷</div>
     <h1><span class="grad">七 處 徵 心</span>
       <span class="sm">Where Is the Mind? · The Seven Searches</span>
     </h1>
     <p class="lead">
-      <span class="zh">佛問阿難：「唯心與目，今何所在？」<br>阿難七度指出心的所在，佛七度破之——<br>看你能不能跟上世尊的推理，認出真心。</span>
+      <span class="zh">佛問阿難：「唯心與目，今何所在？」<br>阿難七度指出心的所在，佛七度破之——<br>看你能不能跟上世尊的推理，認出真心。✨</span>
       <span class="en">The Buddha asked Ānanda, “Where exactly are your mind and your eyes?”<br>Seven times Ānanda names a location for the mind; seven times the Buddha refutes it.<br>Can you follow the World-Honored One’s reasoning and recognize the true mind?</span>
     </p>
 
@@ -195,13 +214,13 @@
     </div>
 
     <div class="modebtns">
-      <button class="btn" id="teachBtn">講解模式
-        <small class="zh">老師帶讀 · 先討論再揭曉破斥</small>
+      <button class="btn teach" id="teachBtn"><span class="ico">📖</span>講解模式
+        <small class="zh">老師帶讀 · 先討論再揭曉</small>
         <small class="en">Teacher-led · discuss, then reveal</small>
       </button>
-      <button class="btn" id="quizBtn">闖關模式
-        <small class="zh">分組搶答 · 選出佛陀的破斥．計分</small>
-        <small class="en">Quiz · pick the Buddha’s refutation · scored</small>
+      <button class="btn" id="quizBtn"><span class="ico">🎯</span>闖關模式
+        <small class="zh">分組搶答 · 選出佛陀的破斥</small>
+        <small class="en">Quiz · pick the refutation · scored</small>
       </button>
     </div>
     <div><a class="printlink" href="print.html">🖨️ 列印版 · 卡牌＋老師引導手冊（無投影設備時用）</a></div>
@@ -221,7 +240,7 @@
     <div class="sutra" id="pSutra"></div>
 
     <div class="who" id="ananda">
-      <div class="ava">🙏</div>
+      <div class="ava">🙋</div>
       <div class="bubble">
         <div class="role zh">阿難 提出</div><div class="role en" style="display:none">Ānanda proposes</div>
         <div class="txt" id="aClaim"></div>
@@ -265,7 +284,7 @@
   <!-- ===== 結局 ===== -->
   <section class="card" id="done">
     <div class="figure" id="figureFinal"></div>
-    <div class="final-h">七 處 皆 非　·　心 不 可 得
+    <div class="final-h">🌸 七 處 皆 非　·　心 不 可 得 🌸
       <span class="en">The Mind Is Found in None of the Seven</span>
     </div>
     <div class="score" id="finalScore" style="display:none"></div>
@@ -354,7 +373,7 @@ const PLACES = [
                   en:"Because the mind vanishes when you close your eyes, so it isn’t in the eyes." }
     ],
     refute:{ zh:"佛問：戴著琉璃看山河大地時，看得見那琉璃嗎？阿難答：看得見。佛言：你既以琉璃喻眼，看外境時就該也「看見自己的眼睛」；倘若真能見自眼，眼便成了身外之境，反而不能與心合作而見了。既然你看不見自己的眼，可知心不是潛藏在眼根之中。",
-             en:"The Buddha asks: wearing the cups while viewing the mountains and rivers, do you see the cups? Ānanda: yes. The Buddha: since you liken the eyes to the glass, then looking out you ought to see your own eyes too. And could you see them, they’d become an external object—unable to work with the mind to see at all. Since you can’t see your own eyes, the mind is not concealed within the eye-faculty." },
+             en:"The Buddha asks: wearing the cups while viewing the mountains and rivers, do you see the cups? Ānanda: yes. The Buddha: since you liken the eyes to the glass, then looking out you ought to see your own eyes too. And could you see them, they’d become an external object—unable to work with the mind to see at all. Since you cannot see your own eyes, the mind is not concealed within the eye-faculty." },
     verdict:"潛伏根裡 · 無有是處",
     key:{ zh:"不見自眼　→　心不潛眼", en:"Can’t see your own eyes → not hidden in them" },
     mk:"eye"
@@ -437,61 +456,68 @@ const PLACES = [
   }
 ];
 
-/* ===================== 身像 SVG ===================== */
+/* ===================== 身像 SVG（可愛版） ===================== */
 function bodySVG(activeMk, doneSet){
   const M = {
     in:[100,150], out:[170,118], eye:[100,52], hand:[58,168], mid:[140,86], all:[100,118]
   };
   let dots = "";
-  function dot(key, cx, cy, label){
-    let fill="rgba(8,12,30,.6)", stroke="rgba(212,175,55,.4)", tcol="#b9b08f", glow="";
-    if(activeMk===key && !doneSet.has(key+"|"+label)){ fill="url(#gold)"; stroke="#f3e0a3"; tcol="#3a2a05"; glow='filter="url(#sh)"'; }
-    else if(doneSet.has(key+"|"+label)){ fill="rgba(224,115,106,.18)"; stroke="#e0736a"; tcol="#e0736a"; }
-    let inner = doneSet.has(key+"|"+label) ? `<text x="${cx}" y="${cy+5}" text-anchor="middle" font-size="15" fill="#e0736a">✕</text>`
-                : `<text x="${cx}" y="${cy+4.5}" text-anchor="middle" font-size="12" fill="${tcol}" font-family="serif">${label}</text>`;
-    return `<circle cx="${cx}" cy="${cy}" r="11" fill="${fill}" stroke="${stroke}" stroke-width="1.6" ${glow}/>${inner}`;
+  function style(on,done){
+    if(on)   return {fill:"url(#gold)", stroke:"#dd9a2a", tcol:"#7a4a16", glow:'filter="url(#sh)"'};
+    if(done) return {fill:"#fdeeec", stroke:"#e3604f", tcol:"#e3604f", glow:""};
+    return {fill:"#ffffff", stroke:"#e7d4c0", tcol:"#bba898", glow:""};
   }
-  const objDot = `<circle cx="178" cy="120" r="4" fill="rgba(212,175,55,.5)"/>`;
-  const ring7 = (activeMk==="all") ? `<circle cx="100" cy="112" r="86" fill="none" stroke="#f3e0a3" stroke-width="1.6" stroke-dasharray="5 6" opacity=".85"/>`
-                : (doneSet.has("all|7") ? `<circle cx="100" cy="112" r="86" fill="none" stroke="#e0736a" stroke-width="1.4" stroke-dasharray="5 6" opacity=".5"/>` : "");
+  function dot(key, cx, cy, label){
+    const on = (activeMk===key) && !doneSet.has(key+"|"+label);
+    const done = doneSet.has(key+"|"+label);
+    const s = style(on,done);
+    let inner = done ? `<text x="${cx}" y="${cy+5}" text-anchor="middle" font-size="15" font-weight="700" fill="#e3604f">✕</text>`
+                : `<text x="${cx}" y="${cy+5}" text-anchor="middle" font-size="13" font-weight="700" fill="${s.tcol}">${label}</text>`;
+    return `<circle cx="${cx}" cy="${cy}" r="12.5" fill="${s.fill}" stroke="${s.stroke}" stroke-width="2" ${s.glow}/>${inner}`;
+  }
+  const objDot = `<circle cx="180" cy="120" r="5" fill="#f5bb52"/>`;
+  const ring7 = (activeMk==="all") ? `<circle cx="100" cy="112" r="88" fill="none" stroke="#f5bb52" stroke-width="2.4" stroke-dasharray="3 8" stroke-linecap="round" opacity=".9"/>`
+                : (doneSet.has("all|7") ? `<circle cx="100" cy="112" r="88" fill="none" stroke="#f4897a" stroke-width="2" stroke-dasharray="3 8" stroke-linecap="round" opacity=".5"/>` : "");
 
   dots += dot("in", ...M.in, 1);
   dots += dot("out", ...M.out, 2);
   dots += dot("eye", ...M.eye, 3);
   {
-    const cx=126, cy=44;
-    let on = (activeMk==="eye4"); let done = doneSet.has("eye4|4");
-    let fill = on?"url(#gold)":(done?"rgba(224,115,106,.18)":"rgba(8,12,30,.6)");
-    let stroke = on?"#f3e0a3":(done?"#e0736a":"rgba(212,175,55,.4)");
-    let tcol = on?"#3a2a05":(done?"#e0736a":"#b9b08f");
-    let inner = done?`<text x="${cx}" y="${cy+5}" text-anchor="middle" font-size="15" fill="#e0736a">✕</text>`
-                    :`<text x="${cx}" y="${cy+4.5}" text-anchor="middle" font-size="12" fill="${tcol}">4</text>`;
-    dots += `<circle cx="${cx}" cy="${cy}" r="11" fill="${fill}" stroke="${stroke}" stroke-width="1.6" ${on?'filter="url(#sh)"':''}/>${inner}`;
+    const cx=126, cy=44, on=(activeMk==="eye4"), done=doneSet.has("eye4|4"), s=style(on,done);
+    let inner = done?`<text x="${cx}" y="${cy+5}" text-anchor="middle" font-size="15" font-weight="700" fill="#e3604f">✕</text>`
+                    :`<text x="${cx}" y="${cy+5}" text-anchor="middle" font-size="13" font-weight="700" fill="${s.tcol}">4</text>`;
+    dots += `<circle cx="${cx}" cy="${cy}" r="12.5" fill="${s.fill}" stroke="${s.stroke}" stroke-width="2" ${s.glow}/>${inner}`;
   }
   dots += dot("hand", ...M.hand, 5);
   dots += dot("mid", ...M.mid, 6);
   {
-    const cx=100, cy=112;
-    let on=(activeMk==="all"); let done=doneSet.has("all|7");
-    let fill = on?"url(#gold)":(done?"rgba(224,115,106,.18)":"rgba(8,12,30,.6)");
-    let stroke = on?"#f3e0a3":(done?"#e0736a":"rgba(212,175,55,.4)");
-    let tcol = on?"#3a2a05":(done?"#e0736a":"#b9b08f");
-    let inner = done?`<text x="${cx}" y="${cy+5}" text-anchor="middle" font-size="15" fill="#e0736a">✕</text>`
-                    :`<text x="${cx}" y="${cy+4.5}" text-anchor="middle" font-size="12" fill="${tcol}">7</text>`;
-    dots += `<circle cx="${cx}" cy="${cy}" r="11" fill="${fill}" stroke="${stroke}" stroke-width="1.6" ${on?'filter="url(#sh)"':''}/>${inner}`;
+    const cx=100, cy=112, on=(activeMk==="all"), done=doneSet.has("all|7"), s=style(on,done);
+    let inner = done?`<text x="${cx}" y="${cy+5}" text-anchor="middle" font-size="15" font-weight="700" fill="#e3604f">✕</text>`
+                    :`<text x="${cx}" y="${cy+5}" text-anchor="middle" font-size="13" font-weight="700" fill="${s.tcol}">7</text>`;
+    dots += `<circle cx="${cx}" cy="${cy}" r="12.5" fill="${s.fill}" stroke="${s.stroke}" stroke-width="2" ${s.glow}/>${inner}`;
   }
 
-  return `<svg viewBox="0 0 200 234" xmlns="http://www.w3.org/2000/svg">
+  return `<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
     <defs>
-      <radialGradient id="gold" cx="50%" cy="40%"><stop offset="0%" stop-color="#fff6d8"/><stop offset="60%" stop-color="#f3e0a3"/><stop offset="100%" stop-color="#d4af37"/></radialGradient>
-      <filter id="sh"><feDropShadow dx="0" dy="0" stdDeviation="3.4" flood-color="#f3e0a3" flood-opacity="0.9"/></filter>
+      <radialGradient id="gold" cx="50%" cy="38%"><stop offset="0%" stop-color="#ffe8b0"/><stop offset="60%" stop-color="#f5bb52"/><stop offset="100%" stop-color="#e8a52f"/></radialGradient>
+      <linearGradient id="body" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#ffd9c2"/><stop offset="100%" stop-color="#f7b79a"/></linearGradient>
+      <filter id="sh"><feDropShadow dx="0" dy="0" stdDeviation="3.6" flood-color="#f5bb52" flood-opacity="0.95"/></filter>
     </defs>
     ${ring7}
-    <g fill="none" stroke="rgba(185,176,143,.5)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-      <circle cx="100" cy="46" r="26"/>
-      <path d="M61 150 Q63 96 100 90 Q137 96 139 150 Z"/>
-      <path d="M61 150 Q100 168 139 150 L150 196 Q100 214 50 196 Z"/>
+    <!-- 蓮座 -->
+    <g fill="#ffd6e3" stroke="#f59bb6" stroke-width="1.6" stroke-linejoin="round">
+      <path d="M52 188 Q60 172 78 180 Q70 192 56 192 Z"/>
+      <path d="M148 188 Q140 172 122 180 Q130 192 144 192 Z"/>
+      <path d="M74 190 Q82 168 100 176 Q118 168 126 190 Z"/>
     </g>
+    <!-- 可愛禪坐身像 -->
+    <g stroke="#e8a98c" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M58 154 Q60 100 100 94 Q140 100 142 154 Q100 172 58 154 Z" fill="url(#body)"/>
+      <circle cx="100" cy="48" r="27" fill="#ffe1cf"/>
+    </g>
+    <!-- 笑臉 -->
+    <g fill="#c97b5a"><circle cx="91" cy="48" r="2.4"/><circle cx="109" cy="48" r="2.4"/></g>
+    <path d="M93 56 Q100 61 107 56" fill="none" stroke="#c97b5a" stroke-width="2" stroke-linecap="round"/>
     ${objDot}
     ${dots}
   </svg>`;
@@ -518,7 +544,7 @@ function renderProgress(){
   let h="";
   for(let i=0;i<7;i++){
     const cls = i<idx ? "done" : (i===idx ? "cur" : "");
-    h += `<div class="dot ${cls}">${i<idx?"✕":i+1}</div>`;
+    h += `<div class="dot ${cls}">${i<idx?"✓":i+1}</div>`;
   }
   $("#prog").innerHTML=h;
 }
@@ -634,12 +660,17 @@ document.addEventListener("keydown",e=>{
   }
 });
 
+/* 飄落花瓣 */
 (function(){
   const st=$("#stars");
-  for(let i=0;i<70;i++){const s=document.createElement("i");
-    const sz=Math.random()*2+0.6; s.style.width=s.style.height=sz+"px";
-    s.style.left=Math.random()*100+"%"; s.style.top=Math.random()*100+"%";
-    s.style.animationDelay=(Math.random()*3)+"s"; st.appendChild(s);}
+  const cols=["#ffd6e3","#ffe6c2","#ffd9c2","#ffe9f0","#fdf0d6"];
+  for(let i=0;i<22;i++){const s=document.createElement("i");
+    const sz=8+Math.random()*12; s.style.width=s.style.height=sz+"px";
+    s.style.left=Math.random()*100+"%";
+    s.style.background=cols[i%cols.length];
+    s.style.animationDuration=(9+Math.random()*9)+"s";
+    s.style.animationDelay=(Math.random()*10)+"s";
+    st.appendChild(s);}
 })();
 </script>
 </body>
