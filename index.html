@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>七處徵心 · Where Is the Mind? — 楞嚴經互動遊戲</title>
+<style>
+  :root{
+    --navy:#0a0e24; --navy2:#131a40; --navy3:#1d2552;
+    --gold:#d4af37; --gold-light:#f3e0a3; --gold-deep:#9c7a1e;
+    --ink:#ede6cf; --ink-soft:#b9b08f;
+    --panel:rgba(18,24,58,.82); --panel-line:rgba(212,175,55,.45);
+    --ok:#5fd08a; --no:#e0736a;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html,body{height:100%;}
+  body{
+    font-family:"Noto Serif TC","Songti TC","STSong","PMingLiU",serif;
+    color:var(--ink);
+    background:radial-gradient(ellipse at 50% -10%, #28306e 0%, var(--navy2) 34%, var(--navy) 72%, #05070f 100%) fixed;
+    min-height:100%; display:flex; flex-direction:column; align-items:center;
+    padding:22px 16px 56px; position:relative; overflow-x:hidden;
+  }
+  .stars{position:fixed; inset:0; pointer-events:none; z-index:0;}
+  .stars i{position:absolute; background:#fff; border-radius:50%; opacity:.8; animation:tw 3s ease-in-out infinite;}
+  @keyframes tw{0%,100%{opacity:.15;}50%{opacity:.9;}}
+
+  .wrap{width:100%; max-width:640px; position:relative; z-index:1; text-align:center;}
+
+  /* 語言顯示控制 */
+  body.lang-zh .en{display:none!important;}
+  body.lang-en .zh{display:none!important;}
+
+  /* 頁首 */
+  .temple{color:var(--gold-light); letter-spacing:.55em; font-size:14px; text-indent:.55em; margin-bottom:10px; text-shadow:0 0 14px rgba(212,175,55,.5);}
+  h1{color:#fff; font-size:32px; font-weight:700; line-height:1.4; text-shadow:0 0 20px rgba(120,140,255,.4);}
+  h1 .grad{background:linear-gradient(90deg,#f3e0a3,#d4af37 50%,#f3e0a3); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent;}
+  h1 .sm{display:block; font-size:15px; color:var(--gold-light); letter-spacing:.18em; margin-top:8px; font-weight:400; -webkit-text-fill-color:initial;}
+  .lead{color:var(--ink-soft); font-size:14.5px; margin-top:16px; line-height:1.9;}
+  .lead .zh{display:block;}
+  .lead .en{display:block; margin-top:10px; color:#9c9576;}
+  .lead .q{display:block; color:var(--gold-light); font-size:16px; margin-top:8px; letter-spacing:.04em;}
+
+  /* 控制列 */
+  .topbar{display:flex; justify-content:center; gap:8px; flex-wrap:wrap; margin:18px 0 4px;}
+  .seg{display:inline-flex; border:1px solid var(--panel-line); border-radius:24px; overflow:hidden; background:rgba(8,12,30,.5);}
+  .seg button{appearance:none; border:none; background:transparent; color:var(--ink-soft); font-family:inherit;
+    font-size:13px; letter-spacing:.06em; padding:7px 15px; cursor:pointer; transition:.15s;}
+  .seg button.on{background:rgba(212,175,55,.22); color:var(--gold-light);}
+  .seg button:not(.on):hover{color:var(--ink);}
+
+  /* 按鈕 */
+  .btn{appearance:none; border:none; cursor:pointer; font-family:inherit;
+    background:linear-gradient(180deg,var(--gold-light),var(--gold) 55%,var(--gold-deep));
+    color:#3a2a05; font-weight:700; font-size:17px; letter-spacing:.16em; text-indent:.16em; padding:13px 34px;
+    border-radius:40px; box-shadow:0 6px 20px rgba(0,0,0,.45), 0 0 18px rgba(212,175,55,.3), inset 0 1px 0 #fff6d8;
+    transition:transform .15s; border:1.5px solid #fff2cf;}
+  .btn:hover{transform:translateY(-2px);} .btn:active{transform:translateY(1px);}
+  .btn.ghost{background:transparent; color:var(--gold-light); border:1.5px solid var(--gold); box-shadow:none; font-size:15px; padding:11px 26px; font-weight:600;}
+  .btn.ghost:hover{background:rgba(212,175,55,.14);}
+  .btn[disabled]{opacity:.45; cursor:default; transform:none;}
+  .modebtns{display:flex; gap:16px; justify-content:center; flex-wrap:wrap; margin-top:26px;}
+  .modebtns .btn{display:flex; flex-direction:column; gap:5px; min-width:210px; padding:18px 24px; line-height:1.4;}
+  .modebtns .btn small{font-size:12.5px; font-weight:400; letter-spacing:.02em; text-indent:0; opacity:.85;}
+
+  /* 卡面板 */
+  .card{display:none; background:var(--panel); border:1.5px solid var(--panel-line); border-radius:18px;
+    box-shadow:0 16px 44px rgba(0,0,0,.55), inset 0 0 32px rgba(40,55,120,.28);
+    padding:22px 20px 24px; margin-top:18px; text-align:left;
+    -webkit-backdrop-filter:blur(6px); backdrop-filter:blur(6px);}
+  .card.show{display:block; animation:fadeUp .5s ease;}
+  @keyframes fadeUp{from{opacity:0; transform:translateY(16px);}to{opacity:1; transform:translateY(0);}}
+
+  /* 進度蓮位 */
+  .progress{display:flex; justify-content:center; gap:7px; margin-bottom:6px; flex-wrap:wrap;}
+  .progress .dot{width:26px; height:26px; border-radius:50%; display:flex; align-items:center; justify-content:center;
+    font-size:13px; color:var(--ink-soft); border:1px solid rgba(212,175,55,.35); background:rgba(8,12,30,.5); transition:.2s;}
+  .progress .dot.cur{border-color:var(--gold); color:#3a2a05; background:linear-gradient(180deg,var(--gold-light),var(--gold)); box-shadow:0 0 12px rgba(212,175,55,.55);}
+  .progress .dot.done{color:var(--no); border-color:rgba(224,115,106,.6);}
+
+  .place-h{display:flex; align-items:baseline; gap:10px; margin:14px 2px 2px; flex-wrap:wrap;}
+  .place-h .num{font-size:13px; letter-spacing:.18em; color:var(--gold); white-space:nowrap;}
+  .place-h .nm{font-size:22px; font-weight:700; color:#fff;}
+  .place-h .nm .en{display:block; font-size:14px; color:var(--gold-light); font-weight:400; letter-spacing:.02em; margin-top:2px;}
+
+  .sutra{margin:12px 0 4px; padding:9px 13px; border-left:3px solid var(--gold-deep); background:rgba(8,12,30,.45);
+    border-radius:0 8px 8px 0; font-size:14px; color:var(--gold-light); line-height:1.85; letter-spacing:.03em;}
+  .sutra b{font-size:11.5px; letter-spacing:.22em; color:var(--gold); display:inline-block; margin-right:8px; vertical-align:1px;}
+
+  .who{display:flex; gap:9px; align-items:flex-start; margin-top:14px;}
+  .who .ava{flex:0 0 auto; width:34px; height:34px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:18px;
+    background:rgba(120,140,210,.18); border:1px solid rgba(120,140,210,.5);}
+  .who.buddha .ava{background:rgba(212,175,55,.18); border-color:var(--gold);}
+  .who .bubble{flex:1; background:rgba(8,12,30,.5); border:1px solid rgba(120,140,210,.3); border-radius:12px; padding:11px 14px;}
+  .who.buddha .bubble{border-color:rgba(212,175,55,.35);}
+  .who .role{font-size:12px; letter-spacing:.14em; color:var(--ink-soft); margin-bottom:5px;}
+  .who.buddha .role{color:var(--gold);}
+  .who .txt{font-size:15px; line-height:1.95;}
+  .who .txt .en{display:block; color:var(--ink-soft); font-size:13.5px; margin-top:6px; line-height:1.8;}
+
+  /* 討論 / 提示 */
+  .discuss{margin-top:15px; text-align:center; color:var(--gold-light); font-size:14.5px; letter-spacing:.04em; line-height:1.8;
+    padding:11px; border:1px dashed rgba(212,175,55,.4); border-radius:12px; background:rgba(212,175,55,.05);}
+  .discuss .en{display:block; color:var(--ink-soft); font-size:13px; margin-top:4px;}
+
+  /* 選項 */
+  .q-stem{margin-top:15px; font-size:15.5px; color:#fff; line-height:1.8; text-align:center;}
+  .q-stem .en{display:block; color:var(--gold-light); font-size:13.5px; margin-top:5px;}
+  .opts{display:flex; flex-direction:column; gap:11px; margin-top:14px;}
+  .opt{appearance:none; cursor:pointer; font-family:inherit; text-align:left; width:100%;
+    background:rgba(8,12,30,.55); border:1.5px solid rgba(212,175,55,.28); border-radius:12px; padding:13px 15px;
+    color:var(--ink); transition:.15s; display:flex; gap:11px; align-items:flex-start;}
+  .opt:hover:not(:disabled){border-color:var(--gold); background:rgba(212,175,55,.1);}
+  .opt:disabled{cursor:default;}
+  .opt .pick{flex:0 0 auto; width:24px; height:24px; border-radius:50%; border:1.5px solid var(--gold-deep); color:var(--gold-light);
+    display:flex; align-items:center; justify-content:center; font-size:13px; font-weight:700;}
+  .opt .ot{flex:1; font-size:14.5px; line-height:1.8;}
+  .opt .ot .en{display:block; color:var(--ink-soft); font-size:13px; margin-top:4px; line-height:1.7;}
+  .opt.correct{border-color:var(--ok); background:rgba(95,208,138,.13);}
+  .opt.correct .pick{background:var(--ok); border-color:var(--ok); color:#06301a;}
+  .opt.wrong{border-color:var(--no); background:rgba(224,115,106,.12);}
+  .opt.wrong .pick{background:var(--no); border-color:var(--no); color:#3a0d09;}
+
+  /* 揭曉破斥 */
+  .reveal{display:none; margin-top:16px;}
+  .reveal.show{display:block; animation:fadeUp .45s ease;}
+  .verdict{text-align:center; margin:4px 0 12px;}
+  .verdict .stamp{display:inline-block; font-size:14px; letter-spacing:.1em; color:#3a0d09; font-weight:700;
+    background:linear-gradient(180deg,#eec0bb,#d98a82); border:1.5px solid #b85a52; border-radius:8px; padding:6px 16px;
+    transform:rotate(-3deg); box-shadow:0 3px 10px rgba(0,0,0,.4);}
+  .key{text-align:center; margin-top:12px; font-size:15px; color:var(--gold-light); letter-spacing:.05em; line-height:1.8;}
+  .key .en{display:block; color:var(--ink-soft); font-size:13px; margin-top:3px;}
+
+  .nav{display:flex; gap:12px; justify-content:center; margin-top:20px; flex-wrap:wrap;}
+
+  /* 結局 */
+  .final-h{font-size:26px; color:#fff; font-weight:700; text-align:center; margin-bottom:6px; text-shadow:0 0 20px rgba(212,175,55,.4);}
+  .final-h .en{display:block; font-size:14px; color:var(--gold-light); font-weight:400; letter-spacing:.06em; margin-top:6px;}
+  .score{text-align:center; margin:14px 0; font-size:16px; color:var(--gold-light);}
+  .score .zh,.score .en{display:block;}
+  .score .en{font-size:14px; color:var(--ink-soft); margin-top:2px;}
+  .score b{font-size:30px; color:#fff;}
+  .truth{margin-top:14px; background:rgba(8,12,30,.55); border:1px solid rgba(212,175,55,.3); border-radius:12px; padding:16px 16px;
+    font-size:15px; line-height:2; color:var(--ink);}
+  .truth .en{display:block; color:var(--ink-soft); font-size:13.5px; margin-top:8px; line-height:1.85;}
+  .truth .hl{color:var(--gold-light); font-weight:700;}
+  .reflect{margin-top:14px;}
+  .reflect .rt{text-align:center; font-size:13px; letter-spacing:.22em; color:var(--gold); margin-bottom:10px;}
+  .reflect ol{list-style:none; counter-reset:r; display:flex; flex-direction:column; gap:10px;}
+  .reflect li{counter-increment:r; position:relative; padding:11px 14px 11px 46px; background:rgba(212,175,55,.06);
+    border:1px dashed rgba(212,175,55,.35); border-radius:12px; font-size:14.5px; line-height:1.8;}
+  .reflect li::before{content:counter(r); position:absolute; left:12px; top:11px; width:24px; height:24px; border-radius:50%;
+    background:rgba(212,175,55,.18); border:1px solid var(--gold); color:var(--gold-light); display:flex; align-items:center; justify-content:center; font-size:13px;}
+  .reflect li .en{display:block; color:var(--ink-soft); font-size:12.5px; margin-top:4px;}
+
+  /* 身像圖 */
+  .figure{display:flex; justify-content:center; margin:6px 0 2px;}
+  .figure svg{width:128px; height:150px;}
+
+  footer{margin-top:30px; color:var(--ink-soft); opacity:.72; font-size:12px; line-height:1.9; text-align:center; max-width:560px;}
+  footer a{color:var(--gold-light); text-decoration:none; border-bottom:1px dotted var(--gold-deep);}
+  .kbd{color:var(--gold); opacity:.8; font-size:11.5px; letter-spacing:.04em; margin-top:8px;}
+  .printlink{display:inline-block; margin-top:14px; color:var(--gold-light); font-size:14px; text-decoration:none;
+    padding:8px 18px; border:1px solid var(--gold); border-radius:24px; background:rgba(212,175,55,.1); letter-spacing:.06em;}
+  .printlink:hover{background:rgba(212,175,55,.2);}
+
+  @media(max-width:480px){
+    h1{font-size:26px;} .place-h .nm{font-size:19px;}
+    .modebtns .btn{min-width:0; width:100%;}
+  }
+</style>
+</head>
+<body class="lang-both">
+<div class="stars" id="stars"></div>
+
+<div class="wrap">
+
+  <!-- ===== 開場 ===== -->
+  <section id="intro">
+    <div class="temple">寶 嚴 禪 寺 · 楞 嚴 經</div>
+    <h1><span class="grad">七 處 徵 心</span>
+      <span class="sm">Where Is the Mind? · The Seven Searches</span>
+    </h1>
+    <p class="lead">
+      <span class="zh">佛問阿難：「唯心與目，今何所在？」<br>阿難七度指出心的所在，佛七度破之——<br>看你能不能跟上世尊的推理，認出真心。</span>
+      <span class="en">The Buddha asked Ānanda, “Where exactly are your mind and your eyes?”<br>Seven times Ānanda names a location for the mind; seven times the Buddha refutes it.<br>Can you follow the World-Honored One’s reasoning and recognize the true mind?</span>
+    </p>
+
+    <div class="topbar">
+      <div class="seg" id="langSeg" aria-label="語言">
+        <button data-lang="both" class="on">雙語</button>
+        <button data-lang="zh">中文</button>
+        <button data-lang="en">EN</button>
+      </div>
+    </div>
+
+    <div class="modebtns">
+      <button class="btn" id="teachBtn">講解模式
+        <small class="zh">老師帶讀 · 先討論再揭曉破斥</small>
+        <small class="en">Teacher-led · discuss, then reveal</small>
+      </button>
+      <button class="btn" id="quizBtn">闖關模式
+        <small class="zh">分組搶答 · 選出佛陀的破斥．計分</small>
+        <small class="en">Quiz · pick the Buddha’s refutation · scored</small>
+      </button>
+    </div>
+    <div><a class="printlink" href="print.html">🖨️ 列印版 · 卡牌＋老師引導手冊（無投影設備時用）</a></div>
+    <div class="kbd zh">課堂提示：投影全螢幕；鍵盤 1/2/3 選答、Enter／→ 下一步。</div>
+    <div class="kbd en">In class: project full-screen. Keys 1/2/3 to answer, Enter/→ to advance.</div>
+  </section>
+
+  <!-- ===== 遊戲卡 ===== -->
+  <section class="card" id="play">
+    <div class="progress" id="prog"></div>
+    <div class="figure" id="figure"></div>
+
+    <div class="place-h">
+      <span class="num" id="pNum"></span>
+      <span class="nm" id="pName"></span>
+    </div>
+    <div class="sutra" id="pSutra"></div>
+
+    <div class="who" id="ananda">
+      <div class="ava">🙏</div>
+      <div class="bubble">
+        <div class="role zh">阿難 提出</div><div class="role en" style="display:none">Ānanda proposes</div>
+        <div class="txt" id="aClaim"></div>
+      </div>
+    </div>
+
+    <!-- 講解模式：討論提示 -->
+    <div class="discuss" id="discuss" style="display:none">
+      <span class="zh">💬 全班討論：世尊會用什麼譬喻、什麼道理來破？</span>
+      <span class="en">💬 Class discussion: with what analogy and reasoning will the Buddha refute this?</span>
+    </div>
+
+    <!-- 闖關模式：題目與選項 -->
+    <div id="quizArea" style="display:none">
+      <div class="q-stem">
+        <span class="zh">佛陀為何說這「無有是處」（不可能）？</span>
+        <span class="en">Why does the Buddha say this is impossible?</span>
+      </div>
+      <div class="opts" id="opts"></div>
+    </div>
+
+    <!-- 破斥揭曉 -->
+    <div class="reveal" id="reveal">
+      <div class="who buddha">
+        <div class="ava">☸️</div>
+        <div class="bubble">
+          <div class="role zh">世尊 破斥</div><div class="role en" style="display:none">The Buddha refutes</div>
+          <div class="txt" id="bRefute"></div>
+        </div>
+      </div>
+      <div class="verdict"><span class="stamp" id="verdict"></span></div>
+      <div class="key" id="pKey"></div>
+    </div>
+
+    <div class="nav">
+      <button class="btn ghost" id="revealBtn">揭曉佛陀破斥 ▸</button>
+      <button class="btn" id="nextBtn" style="display:none">下一處 ▸</button>
+    </div>
+  </section>
+
+  <!-- ===== 結局 ===== -->
+  <section class="card" id="done">
+    <div class="figure" id="figureFinal"></div>
+    <div class="final-h">七 處 皆 非　·　心 不 可 得
+      <span class="en">The Mind Is Found in None of the Seven</span>
+    </div>
+    <div class="score" id="finalScore" style="display:none"></div>
+
+    <div class="truth">
+      <span class="zh">阿難七次所指，都是<span class="hl">「緣塵分別」的妄心</span>——隨外境生、隨外境滅的識心。佛七番徵問，不是要找出妄心藏在哪裡，而是要當下拆穿它「了不可得」，好讓<span class="hl">常住真心、性淨明體</span>顯現。<br>宣化上人云：阿難仍把生滅的妄心當作真心，正是<span class="hl">「認賊為子」</span>。</span>
+      <span class="en">All seven of Ānanda’s answers point to the <span class="hl">conditioned, discriminating mind</span>—the consciousness that arises and ceases along with perceived objects. The Buddha’s sevenfold questioning is not meant to locate that false mind, but to show on the spot that it <span class="hl">cannot be found at all</span>, so that the <span class="hl">everlasting true mind, the pure bright essence of one’s nature</span>, may come to light. As Master Hsüan Hua says, Ānanda still mistakes his deluded mind for his true mind—he has <span class="hl">“mistaken a burglar for his own child.”</span></span>
+    </div>
+
+    <div class="reflect">
+      <div class="rt zh">課堂省思</div><div class="rt en" style="display:none">For reflection</div>
+      <ol>
+        <li><span class="zh">阿難七個答案，是否都暗藏同一個錯誤前提——把「心」當成一個有「位置」的東西？</span><span class="en">Do all seven answers hide the same false assumption—that the mind is a thing with a “location”?</span></li>
+        <li><span class="zh">佛陀「七番破處」，破的是哪一種心？要顯的又是哪一種心？</span><span class="en">Which mind is the Buddha dismantling, and which mind is he pointing to?</span></li>
+        <li><span class="zh">此刻，你「以為」你的心在哪裡？這個「以為」本身，是真心還是妄心？</span><span class="en">Right now, where do you *suppose* your mind is? Is that very supposing the true mind, or the false one?</span></li>
+      </ol>
+    </div>
+
+    <div class="nav">
+      <button class="btn" id="againBtn">再 玩 一 次</button>
+      <button class="btn ghost" id="switchBtn">換個模式</button>
+    </div>
+  </section>
+
+  <footer>
+    經文與義理依《大佛頂首楞嚴經》卷一「七處徵心」，<br>
+    解說參酌 萬佛聖城 宣化上人《楞嚴經淺釋》英譯本（Buddhist Text Translation Society, 2009）。<br>
+    <a href="print.html">🖨️ 列印版 · 卡牌＋老師引導手冊</a><br>
+    © 寶嚴禪寺　Baoyan Chan Monastery　·　課堂教學用
+  </footer>
+</div>
+
+<script>
+/* ===================== 七處徵心 資料 ===================== */
+const PLACES = [
+  {
+    n:1, name:"心在身內", en:"The Mind Is Inside the Body",
+    sutra:"阿難：「識心實居身內。」　佛判：「住在身內，無有是處。」",
+    claim:{ zh:"世間眾生都以為能知覺的心住在身體裡。我的眼睛長在臉上，所以這顆覺知的心，理當也在身體之內。",
+            en:"Everyone believes the conscious mind dwells in the body. My eyes are part of my face, so surely my knowing mind is found within my body too." },
+    q:{ zh:"", en:"" },
+    opts:[
+      { ok:true,  zh:"心若在身內，就該先看見體內——心肝脾胃，至少也看得到指甲生長、筋脈跳動；你既向內一無所見，可知心不在身內。",
+                  en:"If the mind were inside, it should first see your innards—heart, liver, spleen, stomach—or at least nails growing and the pulse beating. You see none of this within, so it isn’t inside." },
+      { ok:false, zh:"因為身體會死亡，而心是不生不滅的，兩者不能在一起。",
+                  en:"Because the body dies while the mind is deathless, so the two can’t be together." },
+      { ok:false, zh:"因為心比身體還大，根本裝不進身體裡。",
+                  en:"Because the mind is larger than the body and simply won’t fit inside." }
+    ],
+    refute:{ zh:"佛以「在堂先見如來」為喻：你坐在講堂中，必先見堂內的佛，再望見堂外的林園。同理，心若在身內，就該先覺知體內——心肝脾胃，乃至指甲生長、筋轉脈搖。既然你向內毫無所見，足見這能分別的心，並不在身內。",
+             en:"The Buddha’s analogy: sitting in the hall, you must see the Buddha inside first, then gaze out at the grove. Likewise, if your mind were inside, it would know the inside first—heart, liver, spleen, even nails growing and pulse throbbing. Since you perceive none of that within, the discriminating mind is not inside the body." },
+    verdict:"住在身內 · 無有是處",
+    key:{ zh:"不見身內　→　心不在內", en:"Sees nothing within → not in the body" },
+    mk:"in"
+  },
+  {
+    n:2, name:"心在身外", en:"The Mind Is Outside the Body",
+    sutra:"阿難：「則我覺了能知之心，住在身外。」　佛判：「住在身外，無有是處。」",
+    claim:{ zh:"既然看不見身內，心應在身外。就像燈點在室外，只照得到外面、照不進室內；眾生見外不見內，正是這個道理。",
+            en:"Since I can’t see within, the mind must be outside—like a lamp set outside a room, lighting the outside but not the inside. Beings see outward, not inward; just so." },
+    opts:[
+      { ok:true,  zh:"心若在身外，身與心便互不相干。但佛一舉手、眼一見，你的心立刻分別得知——身、心明明相知，可見心不在身外。",
+                  en:"If the mind were outside, body and mind would be unrelated. Yet when the Buddha raises his hand and your eye sees it, your mind instantly knows it—body and mind perceive as one. So the mind is not outside." },
+      { ok:false, zh:"因為身外都是虛空，沒有地方可以安放這顆心。",
+                  en:"Because outside is only empty space, with nowhere to put the mind." },
+      { ok:false, zh:"因為心在身外，別人就能看見你的心，這不合理。",
+                  en:"Because if the mind were outside, others could see it, which is absurd." }
+    ],
+    refute:{ zh:"佛以「眾僧用齋」為喻：一人吃飯，眾人不會飽，因各有身命、彼此不相干。心若在身外，身與心也該如此互不相知。然而佛一舉手，眼見手、心即分別，身心分明相知；可知心不在身外。",
+             en:"The Buddha’s analogy: when one monk eats, the others don’t get full—each has a separate body. If the mind were outside, body and mind would likewise be unrelated. Yet the moment the Buddha lifts his hand, the eye sees and the mind discerns together—body and mind clearly know as one. So the mind is not outside." },
+    verdict:"住在身外 · 無有是處",
+    key:{ zh:"身心相知　→　心不在外", en:"Body & mind know together → not outside" },
+    mk:"out"
+  },
+  {
+    n:3, name:"心潛眼根", en:"The Mind Is Hidden in the Eyes",
+    sutra:"阿難：「潛伏根裡，如琉璃合。」　佛判：「潛伏根裡，無有是處。」",
+    claim:{ zh:"那麼心應藏在眼根裡。就像把透明的琉璃（眼鏡）罩在眼上，不妨礙看見外境；心藏在眼裡，所以見外而不見內。",
+            en:"Then the mind hides in the eye-faculty—like clear crystal cups placed over the eyes: they cover the eyes yet don’t block sight. The mind hides in the eyes, so it sees outward but not inward." },
+    opts:[
+      { ok:true,  zh:"戴上琉璃，你同時也看得見那琉璃。心若真「如琉璃在眼」，看外境時就該也看見自己的眼睛；你卻看不見自己的眼，故心不潛於眼根。",
+                  en:"Wearing the crystal cups, you also see the cups. If the mind were truly “like glass on the eyes,” then looking out you should also see your own eyes. But you can’t see your own eyes—so the mind isn’t hidden in them." },
+      { ok:false, zh:"因為眼睛太小，藏不下這顆心。",
+                  en:"Because the eyes are too small to hold the mind." },
+      { ok:false, zh:"因為一閉上眼睛，心就不見了，所以心不在眼裡。",
+                  en:"Because the mind vanishes when you close your eyes, so it isn’t in the eyes." }
+    ],
+    refute:{ zh:"佛問：戴著琉璃看山河大地時，看得見那琉璃嗎？阿難答：看得見。佛言：你既以琉璃喻眼，看外境時就該也「看見自己的眼睛」；倘若真能見自眼，眼便成了身外之境，反而不能與心合作而見了。既然你看不見自己的眼，可知心不是潛藏在眼根之中。",
+             en:"The Buddha asks: wearing the cups while viewing the mountains and rivers, do you see the cups? Ānanda: yes. The Buddha: since you liken the eyes to the glass, then looking out you ought to see your own eyes too. And could you see them, they’d become an external object—unable to work with the mind to see at all. Since you can’t see your own eyes, the mind is not concealed within the eye-faculty." },
+    verdict:"潛伏根裡 · 無有是處",
+    key:{ zh:"不見自眼　→　心不潛眼", en:"Can’t see your own eyes → not hidden in them" },
+    mk:"eye"
+  },
+  {
+    n:4, name:"閉眼見暗即見內", en:"Seeing Darkness Is “Seeing Within”",
+    sutra:"阿難：「開眼見明，名為見外；閉眼見暗，名為見內。」　佛判：「見暗名見內者，無有是處。」",
+    claim:{ zh:"我再重想：臟腑在內幽暗，孔竅向外明亮。開眼見光，叫「見外」；閉眼見暗，叫「見內」。這樣說可以嗎？",
+            en:"Let me reconsider: my organs lie dark within, my orifices open to the light without. Eyes open, I see light—“seeing outside”; eyes closed, I see darkness—“seeing inside.” How’s that?" },
+    opts:[
+      { ok:true,  zh:"閉眼所見的「暗」，若現在眼前就不算「內」；若說暗即是內，那在伸手不見五指的暗室裡，滿室黑暗豈不都成了你的五臟？再者，若閉眼能見內，開眼就該見到自己的臉——你卻見不到，故「見暗」並非「見內」。",
+                  en:"The darkness seen with closed eyes—if it stands before your eyes, it isn’t “inside.” And if darkness were “inside,” a pitch-black room would be your own organs. Besides, if closing the eyes were seeing within, opening them should let you see your own face—but you can’t. So “seeing darkness” is not “seeing within.”" },
+      { ok:false, zh:"因為閉上眼睛時，心就睡著了，什麼也不能見。",
+                  en:"Because when the eyes close the mind falls asleep and can see nothing." },
+      { ok:false, zh:"因為黑暗中本來就什麼都沒有，無可見之物。",
+                  en:"Because there is simply nothing at all in the dark to be seen." }
+    ],
+    refute:{ zh:"佛分兩步破：①閉眼見暗，那「暗」若現於眼前，就在身外、不在身內；若硬說暗即是內，那麼處在漆黑暗室時，滿室黑暗豈不都成了你的臟腑？②若閉眼真能「返見身內」，開眼時也該能「返見自己的臉」。既然開眼見不到自己的臉，閉眼也不可能見到身內。故「見暗為見內」不成立。",
+             en:"The Buddha refutes in two steps. ① The darkness seen with eyes closed: if it stands before the eyes, it is outside, not within; and if darkness itself were “inside,” then in a pitch-dark room the whole darkness would be your own organs. ② If closing the eyes truly let you “turn and see within,” then opening them should let you “turn and see your own face.” Since you can’t see your face with open eyes, you can’t see your insides with closed eyes either. So “seeing darkness = seeing within” fails." },
+    verdict:"見暗名見內 · 無有是處",
+    key:{ zh:"不能返見己面　→　見暗非見內", en:"Can’t see your own face → darkness isn’t “within”" },
+    mk:"eye"
+  },
+  {
+    n:5, name:"隨所合處心則隨有", en:"The Mind Arises Wherever It Combines",
+    sutra:"阿難：「隨所合處，心則隨有。」　佛判：「隨所合處，心隨有者，無有是處。」",
+    claim:{ zh:"我聽佛說過「心生則種種法生，法生則種種心生」。我這能思惟的，正是心隨外境和合而起——隨所合處，心就隨之而有，不固定在內、外、中間任何一處。",
+            en:"I’ve heard the Buddha say, ‘As the mind arises, objects arise; as objects arise, the mind arises.’ My very thinking is the mind coming to be by combining with objects—wherever it combines, there the mind is, fixed neither inside, outside, nor between." },
+    opts:[
+      { ok:true,  zh:"這心若「本無自體」，就沒有東西能去和合；若「有自體」，捏自己一下，覺痛的心是從內出、還是從外入？由內出該見身內、由外入該見己面——皆已被破。又：痛若只在一處即非遍身，若遍身則捏一肢應四肢俱痛。處處矛盾。",
+                  en:"If this mind has no nature of its own, there is nothing for objects to combine with; if it has a nature, then pinch yourself—does the feeling come out from inside or in from outside? Out → it should see your innards; in → it should see your face—both refuted. And if the pinch is felt in one spot it isn’t whole-body; if whole-body, pinching one limb should hurt all four. Contradictions throughout." },
+      { ok:false, zh:"因為外境都是虛妄的，所以隨外境而生的心也是虛妄，不算數。",
+                  en:"Because objects are illusory, the mind that arises with them is illusory too, so it doesn’t count." },
+      { ok:false, zh:"因為心一次只能想一件事，不能同時和合很多外境。",
+                  en:"Because the mind can think only one thing at a time and can’t combine with many objects at once." }
+    ],
+    refute:{ zh:"佛破三關：①若此心無自體，便無物可與外境和合；若無體卻能合，則成十八界外的「第十九界、第七塵」，不可能。②若此心有自體，捏身一下——能覺痛的心究竟從內出或從外入？從內出又該見身內，從外入又該先見己面（皆前已破）。③再問此體是一是多、遍身不遍身：若一體遍身，捏一處應全身覺；若不遍身，同時觸頭與足就只覺一處——都違背事實。故「隨合而有」不成立。",
+             en:"The Buddha breaks it three ways. ① If this mind has no nature of its own, nothing can combine with objects; if it had none yet still combined, you’d get an impossible “nineteenth element / seventh kind of object.” ② If it has a nature, pinch yourself—does the awareness come out from inside or in from outside? Out → it should see your insides; in → it should first see your face (both refuted). ③ Is that nature one or many, pervading the body or not? If one and pervading, pinching one spot would be felt everywhere; if not, touching head and foot at once you’d feel only one. All contradict experience. So “arising wherever it combines” fails." },
+    verdict:"隨所合而有 · 無有是處",
+    key:{ zh:"隨合無定體　→　了不可得", en:"No fixed nature in combining → cannot be found" },
+    mk:"hand"
+  },
+  {
+    n:6, name:"心在中間", en:"The Mind Is in the Middle",
+    sutra:"阿難：「眼色為緣，生於眼識……心在中間。」　佛判：「心在中間，無有是處。」",
+    claim:{ zh:"那麼心應在「中間」——既不在內，也不在外。我所謂的中，是在眼根與外境之間：眼識生起的地方，心就在那裡。",
+            en:"Then the mind is “in the middle”—neither inside nor outside. By “middle” I mean between the eye-faculty and its object, where eye-consciousness arises; the mind is right there." },
+    opts:[
+      { ok:true,  zh:"「中」必須有確定的位置：在身表就偏外、在身內就同內。又：心若處在「能知的根」與「無知的境」之間，則它或與兩者同性——成「知與不知混雜」的矛盾；或與兩者皆異——便「非知非不知」、根本無體。故心不在中間。",
+                  en:"A “middle” needs a definite place: on the body’s surface it leans outward, within it is the same as inside. And if the mind sits between the knowing faculty and the unknowing object, it is either the same as both—a contradictory blend of aware and unaware—or different from both—neither aware nor unaware, with no nature at all. So it’s not in the middle." },
+      { ok:false, zh:"因為中間會一直移動，根本抓不住，所以心不在中間。",
+                  en:"Because the middle keeps shifting and can’t be pinned down, so the mind isn’t there." },
+      { ok:false, zh:"因為佛只承認「內」和「外」兩處，沒有中間。",
+                  en:"Because the Buddha allows only “inside” and “outside,” with no middle." }
+    ],
+    refute:{ zh:"佛破：所謂「中」必有定處。①你立一個記號標「中」：從東看它在西，從南看它在北——記號不定，「中」即無實。②你說中在「根、塵之間」：眼根能知、外境無知。心若與二者同性，便成「能知與無知」混在一起，自相矛盾；心若與二者皆異，便「非知非不知」，等於無體。兩路皆不通，故心不在中間。",
+             en:"The Buddha refutes: a “middle” must have a fixed location. ① Plant a marker for “middle”: from the east it lies to the west, from the south to the north—the marker is indefinite, so “middle” has no reality. ② You say the middle is “between faculty and object”: the eye-faculty is aware, the object is not. If the mind shares the nature of both, it’s a self-contradictory mix of aware-and-unaware; if it differs from both, it’s “neither aware nor unaware”—that is, no nature at all. Neither path works, so the mind is not in the middle." },
+    verdict:"心在中間 · 無有是處",
+    key:{ zh:"中無定處、知無雜成　→　非在中間", en:"“Middle” has no fixed place → not in between" },
+    mk:"mid"
+  },
+  {
+    n:7, name:"一切無著名之為心", en:"The Mind Is “Non-Attachment,” Located Nowhere",
+    sutra:"阿難：「一切無著，名之為心。」　佛判：「都無所在，無有是處。」",
+    claim:{ zh:"我常聽佛說，這能分別覺知的心，不在內、不在外、不在中間，俱無所在。那麼「一切無所執著」，是不是就叫做我的心？",
+            en:"I’ve often heard the Buddha say this discerning mind is not inside, not outside, not in the middle—nowhere at all. So is “non-attachment to anything” itself my mind?" },
+    opts:[
+      { ok:true,  zh:"世間萬物都各有所在。你說的這個心是「有」還是「無」？若全然無處，就如龜毛兔角、根本不存在，怎能稱為心？若它確實存在，就有相；凡有相必有所在。「無著」仍暗中肯定了一個有相之物，依舊落入「有所在」，自相矛盾。",
+                  en:"Everything in the world has its place. This mind you speak of—does it exist or not? If it’s utterly nowhere, it’s like turtle-fur or hare-horns: non-existent—how call it a mind? And if it does exist, it has attributes; whatever has attributes has a location. “Non-attachment” still secretly affirms an existing, attributed thing—so it still falls into “having a place,” contradicting itself." },
+      { ok:false, zh:"因為「無著」其實就是執著於「無」，所以還是一種執著。",
+                  en:"Because “non-attachment” is really just attachment to “nothingness,” so it’s still attachment." },
+      { ok:false, zh:"因為心其實是在中間，阿難前面說錯了。",
+                  en:"Because the mind is really in the middle; Ānanda was wrong earlier." }
+    ],
+    refute:{ zh:"佛破：空中飛的、地上走的、水裡游的，世間一切萬物都各有所在。你這「無所在」的心，究竟是「有」是「無」？①若它無所在如同不存在——龜毛、兔角本來就沒有，怎能說它是心？②若它確是個「有」——凡存在必有相，有相必有處。可見「無著」之說，仍暗中肯定了一個有相之物，依舊落入「有所在」，前後矛盾。故「一切無著」也了不可得。",
+             en:"The Buddha refutes: everything that flies in the air, walks on land, or swims in water—all things in the world—has its place. This “nowhere” mind of yours: does it exist or not? ① If it’s nowhere like a non-existent thing—turtle-fur and hare-horns never existed, so how call it a mind? ② If it truly exists—whatever exists has attributes, and whatever has attributes has a location. So “non-attachment” still affirms an existing, attributed thing, which must have a place—contradicting itself. So “located nowhere” cannot be found either." },
+    verdict:"都無所在 · 無有是處",
+    key:{ zh:"有相必有處　→　無著亦不可得", en:"What exists has a place → “nowhere” fails too" },
+    mk:"all"
+  }
+];
+
+/* ===================== 身像 SVG ===================== */
+function bodySVG(activeMk, doneSet){
+  const M = {
+    in:[100,150], out:[170,118], eye:[100,52], hand:[58,168], mid:[140,86], all:[100,118]
+  };
+  let dots = "";
+  function dot(key, cx, cy, label){
+    let fill="rgba(8,12,30,.6)", stroke="rgba(212,175,55,.4)", tcol="#b9b08f", glow="";
+    if(activeMk===key && !doneSet.has(key+"|"+label)){ fill="url(#gold)"; stroke="#f3e0a3"; tcol="#3a2a05"; glow='filter="url(#sh)"'; }
+    else if(doneSet.has(key+"|"+label)){ fill="rgba(224,115,106,.18)"; stroke="#e0736a"; tcol="#e0736a"; }
+    let inner = doneSet.has(key+"|"+label) ? `<text x="${cx}" y="${cy+5}" text-anchor="middle" font-size="15" fill="#e0736a">✕</text>`
+                : `<text x="${cx}" y="${cy+4.5}" text-anchor="middle" font-size="12" fill="${tcol}" font-family="serif">${label}</text>`;
+    return `<circle cx="${cx}" cy="${cy}" r="11" fill="${fill}" stroke="${stroke}" stroke-width="1.6" ${glow}/>${inner}`;
+  }
+  const objDot = `<circle cx="178" cy="120" r="4" fill="rgba(212,175,55,.5)"/>`;
+  const ring7 = (activeMk==="all") ? `<circle cx="100" cy="112" r="86" fill="none" stroke="#f3e0a3" stroke-width="1.6" stroke-dasharray="5 6" opacity=".85"/>`
+                : (doneSet.has("all|7") ? `<circle cx="100" cy="112" r="86" fill="none" stroke="#e0736a" stroke-width="1.4" stroke-dasharray="5 6" opacity=".5"/>` : "");
+
+  dots += dot("in", ...M.in, 1);
+  dots += dot("out", ...M.out, 2);
+  dots += dot("eye", ...M.eye, 3);
+  {
+    const cx=126, cy=44;
+    let on = (activeMk==="eye4"); let done = doneSet.has("eye4|4");
+    let fill = on?"url(#gold)":(done?"rgba(224,115,106,.18)":"rgba(8,12,30,.6)");
+    let stroke = on?"#f3e0a3":(done?"#e0736a":"rgba(212,175,55,.4)");
+    let tcol = on?"#3a2a05":(done?"#e0736a":"#b9b08f");
+    let inner = done?`<text x="${cx}" y="${cy+5}" text-anchor="middle" font-size="15" fill="#e0736a">✕</text>`
+                    :`<text x="${cx}" y="${cy+4.5}" text-anchor="middle" font-size="12" fill="${tcol}">4</text>`;
+    dots += `<circle cx="${cx}" cy="${cy}" r="11" fill="${fill}" stroke="${stroke}" stroke-width="1.6" ${on?'filter="url(#sh)"':''}/>${inner}`;
+  }
+  dots += dot("hand", ...M.hand, 5);
+  dots += dot("mid", ...M.mid, 6);
+  {
+    const cx=100, cy=112;
+    let on=(activeMk==="all"); let done=doneSet.has("all|7");
+    let fill = on?"url(#gold)":(done?"rgba(224,115,106,.18)":"rgba(8,12,30,.6)");
+    let stroke = on?"#f3e0a3":(done?"#e0736a":"rgba(212,175,55,.4)");
+    let tcol = on?"#3a2a05":(done?"#e0736a":"#b9b08f");
+    let inner = done?`<text x="${cx}" y="${cy+5}" text-anchor="middle" font-size="15" fill="#e0736a">✕</text>`
+                    :`<text x="${cx}" y="${cy+4.5}" text-anchor="middle" font-size="12" fill="${tcol}">7</text>`;
+    dots += `<circle cx="${cx}" cy="${cy}" r="11" fill="${fill}" stroke="${stroke}" stroke-width="1.6" ${on?'filter="url(#sh)"':''}/>${inner}`;
+  }
+
+  return `<svg viewBox="0 0 200 234" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <radialGradient id="gold" cx="50%" cy="40%"><stop offset="0%" stop-color="#fff6d8"/><stop offset="60%" stop-color="#f3e0a3"/><stop offset="100%" stop-color="#d4af37"/></radialGradient>
+      <filter id="sh"><feDropShadow dx="0" dy="0" stdDeviation="3.4" flood-color="#f3e0a3" flood-opacity="0.9"/></filter>
+    </defs>
+    ${ring7}
+    <g fill="none" stroke="rgba(185,176,143,.5)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="100" cy="46" r="26"/>
+      <path d="M61 150 Q63 96 100 90 Q137 96 139 150 Z"/>
+      <path d="M61 150 Q100 168 139 150 L150 196 Q100 214 50 196 Z"/>
+    </g>
+    ${objDot}
+    ${dots}
+  </svg>`;
+}
+
+/* ===================== 遊戲邏輯 ===================== */
+const $ = s => document.querySelector(s);
+let mode="teach", idx=0, score=0, answered=false;
+const doneSet = new Set();
+const mkLabel = { in:"in|1", out:"out|2", eye:"eye|3", eye4:"eye4|4", hand:"hand|5", mid:"mid|6", all:"all|7" };
+const activeMkOf = i => ["in","out","eye","eye4","hand","mid","all"][i];
+
+const intro=$("#intro"), play=$("#play"), done=$("#done");
+
+function startGame(m){
+  mode=m; idx=0; score=0; doneSet.clear();
+  intro.style.display="none"; done.classList.remove("show");
+  play.classList.add("show");
+  renderProgress(); renderPlace();
+  window.scrollTo({top:0, behavior:"smooth"});
+}
+
+function renderProgress(){
+  let h="";
+  for(let i=0;i<7;i++){
+    const cls = i<idx ? "done" : (i===idx ? "cur" : "");
+    h += `<div class="dot ${cls}">${i<idx?"✕":i+1}</div>`;
+  }
+  $("#prog").innerHTML=h;
+}
+
+function renderPlace(){
+  const p = PLACES[idx];
+  answered=false;
+  $("#figure").innerHTML = bodySVG(activeMkOf(idx), doneSet);
+  $("#pNum").textContent = `第 ${["一","二","三","四","五","六","七"][idx]} 處　·　Search ${idx+1} / 7`;
+  $("#pName").innerHTML = `${p.name}<span class="en">${p.en}</span>`;
+  $("#pSutra").innerHTML = `<b>經文</b>${p.sutra}`;
+  $("#aClaim").innerHTML = `<span class="zh">${p.claim.zh}</span><span class="en">${p.claim.en}</span>`;
+
+  $("#bRefute").innerHTML = `<span class="zh">${p.refute.zh}</span><span class="en">${p.refute.en}</span>`;
+  $("#verdict").textContent = p.verdict;
+  $("#pKey").innerHTML = `<span class="zh">🔑 ${p.key.zh}</span><span class="en">🔑 ${p.key.en}</span>`;
+  $("#reveal").classList.remove("show");
+  $("#nextBtn").style.display="none";
+
+  if(mode==="teach"){
+    $("#discuss").style.display="block";
+    $("#quizArea").style.display="none";
+    $("#revealBtn").style.display="inline-block";
+    $("#revealBtn").disabled=false;
+  } else {
+    $("#discuss").style.display="none";
+    $("#quizArea").style.display="block";
+    $("#revealBtn").style.display="none";
+    renderOpts(p);
+  }
+}
+
+function renderOpts(p){
+  const order=[0,1,2].sort(()=>Math.random()-0.5);
+  const letters=["A","B","C"];
+  let h="";
+  order.forEach((oi,k)=>{
+    const o=p.opts[oi];
+    h+=`<button class="opt" data-ok="${o.ok}" data-k="${k}">
+          <span class="pick">${letters[k]}</span>
+          <span class="ot"><span class="zh">${o.zh}</span><span class="en">${o.en}</span></span>
+        </button>`;
+  });
+  $("#opts").innerHTML=h;
+  document.querySelectorAll("#opts .opt").forEach(b=>b.addEventListener("click",()=>chooseOpt(b)));
+}
+
+function chooseOpt(btn){
+  if(answered) return; answered=true;
+  const ok = btn.dataset.ok==="true";
+  document.querySelectorAll("#opts .opt").forEach(b=>{
+    b.disabled=true;
+    if(b.dataset.ok==="true") b.classList.add("correct");
+  });
+  if(!ok) btn.classList.add("wrong");
+  else score++;
+  showReveal();
+}
+
+function showReveal(){
+  doneSet.add(mkLabel[activeMkOf(idx)]);
+  $("#figure").innerHTML = bodySVG(activeMkOf(idx), doneSet);
+  $("#reveal").classList.add("show");
+  $("#revealBtn").style.display="none";
+  $("#nextBtn").style.display="inline-block";
+  $("#nextBtn").focus();
+  $("#reveal").scrollIntoView({behavior:"smooth", block:"nearest"});
+}
+
+function nextPlace(){
+  if(idx<6){ idx++; renderProgress(); renderPlace(); window.scrollTo({top:0,behavior:"smooth"}); }
+  else finish();
+}
+
+function finish(){
+  play.classList.remove("show");
+  ["in","out","eye","eye4","hand","mid","all"].forEach(k=>doneSet.add(mkLabel[k]));
+  $("#figureFinal").innerHTML = bodySVG(null, doneSet);
+  if(mode==="quiz"){
+    $("#finalScore").style.display="block";
+    $("#finalScore").innerHTML = `<span class="zh">答對 <b>${score}</b> / 7　處</span><span class="en">Correct: <b>${score}</b> / 7</span>`;
+  } else {
+    $("#finalScore").style.display="none";
+  }
+  done.classList.add("show");
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+
+$("#teachBtn").addEventListener("click",()=>startGame("teach"));
+$("#quizBtn").addEventListener("click",()=>startGame("quiz"));
+$("#revealBtn").addEventListener("click",showReveal);
+$("#nextBtn").addEventListener("click",nextPlace);
+$("#againBtn").addEventListener("click",()=>startGame(mode));
+$("#switchBtn").addEventListener("click",()=>{ done.classList.remove("show"); intro.style.display="block"; window.scrollTo({top:0,behavior:"smooth"}); });
+
+document.querySelectorAll("#langSeg button").forEach(b=>{
+  b.addEventListener("click",()=>{
+    document.querySelectorAll("#langSeg button").forEach(x=>x.classList.remove("on"));
+    b.classList.add("on");
+    document.body.className = "lang-"+b.dataset.lang;
+  });
+});
+
+document.addEventListener("keydown",e=>{
+  if(!play.classList.contains("show")) return;
+  if(mode==="quiz" && !answered && ["1","2","3"].includes(e.key)){
+    const b=document.querySelector(`#opts .opt[data-k="${+e.key-1}"]`); if(b) b.click();
+  }
+  if((e.key==="Enter"||e.key==="ArrowRight"||e.key===" ")){
+    e.preventDefault();
+    if($("#nextBtn").style.display!=="none") nextPlace();
+    else if(mode==="teach" && $("#revealBtn").style.display!=="none") showReveal();
+  }
+});
+
+(function(){
+  const st=$("#stars");
+  for(let i=0;i<70;i++){const s=document.createElement("i");
+    const sz=Math.random()*2+0.6; s.style.width=s.style.height=sz+"px";
+    s.style.left=Math.random()*100+"%"; s.style.top=Math.random()*100+"%";
+    s.style.animationDelay=(Math.random()*3)+"s"; st.appendChild(s);}
+})();
+</script>
+</body>
+</html>

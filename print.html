@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>七處徵心 · 列印版（卡牌＋老師引導手冊）— 寶嚴禪寺</title>
+<style>
+  :root{ --ink:#1d2552; --ink2:#3a3f63; --gold:#9c7a1e; --gold2:#b89530; --line:#c9b676; --paper:#fcf8ef; --soft:#6b6647; }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{ font-family:"Noto Serif TC","Songti TC","STSong","PMingLiU",serif; color:var(--ink); background:#e7e2d2; padding:24px 14px 60px; line-height:1.7; }
+  .sheet{ max-width:820px; margin:0 auto 22px; background:var(--paper); padding:30px 34px; box-shadow:0 6px 24px rgba(0,0,0,.18); border-radius:4px; }
+
+  /* 工具列（不列印） */
+  .toolbar{ max-width:820px; margin:0 auto 18px; display:flex; gap:12px; align-items:center; justify-content:center; flex-wrap:wrap; }
+  .toolbar .btn{ appearance:none; border:1.5px solid var(--gold); background:var(--gold); color:#fff; font-family:inherit; font-size:16px; font-weight:700;
+    letter-spacing:.12em; padding:11px 26px; border-radius:8px; cursor:pointer; }
+  .toolbar .btn.ghost{ background:#fff; color:var(--gold); }
+  .toolbar .tip{ color:#5a553f; font-size:13px; }
+  .toolbar a{ color:var(--gold); }
+
+  h1{ font-size:27px; text-align:center; letter-spacing:.06em; }
+  h1 small{ display:block; font-size:14px; color:var(--gold); font-weight:400; letter-spacing:.14em; margin-top:6px; }
+  .temple{ text-align:center; color:var(--gold); letter-spacing:.4em; font-size:12.5px; margin-bottom:8px; }
+  h2{ font-size:18px; color:var(--gold); border-bottom:2px solid var(--line); padding-bottom:6px; margin:22px 0 12px; letter-spacing:.08em; }
+  h3{ font-size:15.5px; margin:14px 0 5px; color:var(--ink); }
+  p,li{ font-size:14.5px; color:var(--ink2); }
+  ul,ol{ margin:6px 0 6px 22px; } li{ margin:4px 0; }
+  .en{ color:var(--soft); font-size:13px; }
+  .lead{ text-align:center; color:var(--ink2); font-size:14px; margin:4px 0 6px; }
+
+  .play{ background:#fff7e3; border:1px solid var(--line); border-radius:8px; padding:12px 16px; margin:10px 0; }
+  .play .nm{ font-weight:700; color:var(--gold); font-size:15px; }
+  .grid2{ display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+  .keytable{ width:100%; border-collapse:collapse; margin-top:8px; font-size:13.5px; }
+  .keytable th,.keytable td{ border:1px solid var(--line); padding:7px 9px; text-align:left; vertical-align:top; }
+  .keytable th{ background:#f3ecd4; color:var(--gold); }
+  .keytable td b{ color:var(--ink); }
+  .note{ font-size:13px; color:#6b6647; margin-top:6px; }
+
+  /* 卡牌 */
+  .cards{ display:grid; grid-template-columns:1fr 1fr; gap:0; margin-top:6px; }
+  .card{ border:1.5px dashed #b3a25f; padding:13px 14px 14px; min-height:240px; position:relative; display:flex; flex-direction:column; }
+  .card .corner{ position:absolute; top:8px; right:11px; font-size:12px; color:var(--gold); letter-spacing:.1em; }
+  .card .tag{ font-size:11.5px; letter-spacing:.18em; color:#fff; background:var(--ink); display:inline-block; padding:3px 10px; border-radius:4px; }
+  .card.refute .tag{ background:var(--gold); }
+  .card .nm{ font-size:18px; font-weight:700; margin:9px 0 1px; }
+  .card .nm .en{ display:block; font-size:12px; color:var(--soft); font-weight:400; margin-top:2px; }
+  .card .sutra{ font-size:12.5px; color:var(--gold); border-left:3px solid var(--line); padding:3px 0 3px 8px; margin:7px 0; }
+  .card .body{ font-size:13px; color:var(--ink2); flex:1; }
+  .card .body .en{ display:block; margin-top:4px; }
+  .card .ask{ margin-top:8px; font-size:13px; font-weight:700; color:var(--ink); text-align:center; border-top:1px dotted #c9b676; padding-top:7px; }
+  .card .verdict{ text-align:center; font-weight:700; color:#a23; font-size:13px; margin-top:6px; }
+  .card .key{ text-align:center; font-size:12.5px; color:var(--gold); margin-top:4px; }
+
+  .secthead{ text-align:center; margin:4px 0 10px; }
+  .secthead .t{ font-size:17px; color:var(--gold); letter-spacing:.1em; font-weight:700; }
+  .secthead .d{ font-size:12.5px; color:#6b6647; }
+
+  @media print{
+    body{ background:#fff; padding:0; }
+    .toolbar{ display:none; }
+    .sheet{ box-shadow:none; border-radius:0; margin:0; max-width:none; padding:14mm 12mm; page-break-after:always; }
+    .sheet:last-child{ page-break-after:auto; }
+    .card{ break-inside:avoid; min-height:62mm; }
+    .cards{ gap:0; }
+    a{ color:var(--ink); text-decoration:none; }
+  }
+  @page{ size:A4; margin:10mm; }
+  @media(max-width:560px){ .grid2,.cards{ grid-template-columns:1fr; } }
+</style>
+</head>
+<body>
+
+<div class="toolbar">
+  <button class="btn" onclick="window.print()">🖨️ 列印 / 存成 PDF</button>
+  <a class="btn ghost" href="index.html">↩ 回投影互動版</a>
+  <span class="tip">建議：A4 直印；卡牌頁沿虛線剪下。彩色或黑白皆可。</span>
+</div>
+
+<!-- ============ 第1頁：老師引導手冊 ============ -->
+<section class="sheet">
+  <div class="temple">寶 嚴 禪 寺　·　楞 嚴 經 卷 一</div>
+  <h1>七處徵心　·　老師引導手冊
+    <small>Where Is the Mind? — Facilitator’s Guide for Group Discussion</small>
+  </h1>
+  <p class="lead">適合成人班分組討論（無需投影設備）。每組一套卡牌，約 25–40 分鐘。</p>
+
+  <h2>一、課程目標</h2>
+  <ul>
+    <li>讓學員親身經歷「七處徵心」的論辯：阿難七次指出「心在某處」，世尊七次破之。</li>
+    <li>體會七個答案<b>共同的錯誤前提</b>——把「心」當成一個有「位置」的東西。</li>
+    <li>分辨<b>緣塵分別的妄心</b>與<b>常住真心</b>，明白佛「七番破處」是要破妄顯真，而非真的去找心藏在哪。</li>
+  </ul>
+
+  <h2>二、教具</h2>
+  <ul>
+    <li><b>主張卡 ×7</b>（阿難的七種說法，正面朝上發給各組）。</li>
+    <li><b>破斥卡 ×7</b>（世尊的破斥與判語，先由老師保管，作為對答案用）。</li>
+    <li>每組一張白紙與筆。</li>
+  </ul>
+
+  <h2>三、三種玩法（任選或混用）</h2>
+  <div class="play"><span class="nm">玩法 A · 配對挑戰（推薦）</span><br>
+    各組拿到 7 張「主張卡」，逐一討論：<b>「世尊會用什麼譬喻、什麼道理來破？」</b>把想法寫在紙上，再翻開對應「破斥卡」對照。最接近者得分。</div>
+  <div class="play"><span class="nm">玩法 B · 排序闖關</span><br>
+    把主張卡打散，請各組依阿難<b>提出的先後順序</b>排列（內 → 外 → 潛眼 → 明暗 → 隨合 → 中間 → 無著），並說出每處被破的關鍵句。</div>
+  <div class="play"><span class="nm">玩法 C · 法義對辯</span><br>
+    兩人一組：一人扮阿難讀「主張卡」，一人扮世尊，憑理解回應；再以「破斥卡」驗證。角色互換。</div>
+
+  <h2>四、答案對照表（老師用）</h2>
+  <table class="keytable">
+    <tr><th style="width:18%">處</th><th style="width:40%">阿難主張</th><th>破斥關鍵</th></tr>
+    <tr><td><b>一</b> 心在身內</td><td>心住身體裡</td><td>心若在內應先見臟腑 → <b>不見身內，故非在內</b></td></tr>
+    <tr><td><b>二</b> 心在身外</td><td>如燈照室外</td><td>佛舉手、眼見心即知 → <b>身心相知，故非在外</b></td></tr>
+    <tr><td><b>三</b> 心潛眼根</td><td>如琉璃罩眼</td><td>戴琉璃應見自眼 → <b>不見自眼，故非潛眼</b></td></tr>
+    <tr><td><b>四</b> 閉眼見暗即見內</td><td>開眼見明=外，閉眼見暗=內</td><td>開眼不能返見己面 → <b>見暗非見內</b></td></tr>
+    <tr><td><b>五</b> 隨所合處心則隨有</td><td>心隨外境和合而生</td><td>無體則不能合、有體則內外已破；捏身覺痛從何來？ → <b>了不可得</b></td></tr>
+    <tr><td><b>六</b> 心在中間</td><td>在根、塵之間</td><td>中無定處；兼知與不知則矛盾 → <b>非在中間</b></td></tr>
+    <tr><td><b>七</b> 一切無著名之為心</td><td>俱無所在即是心</td><td>無則如龜毛兔角、有則有相必有處 → <b>無著亦不可得</b></td></tr>
+  </table>
+
+  <h2>五、收攝開示（七處皆非之後）</h2>
+  <p>阿難七次所指，都是<b>「緣塵分別」的妄心</b>——隨外境生、隨外境滅的識心。世尊七番徵問，不是要找出妄心藏在哪裡，而是要當下拆穿它<b>「了不可得」</b>，好讓<b>常住真心、性淨明體</b>顯現。宣化上人云：阿難仍把生滅的妄心當作真心，正是<b>「認賊為子」</b>。</p>
+  <h3>課堂省思（可帶討論）</h3>
+  <ol>
+    <li>阿難七個答案，是否都暗藏同一個錯誤前提——把「心」當成一個有「位置」的東西？</li>
+    <li>世尊「七番破處」，破的是哪一種心？要顯的又是哪一種心？</li>
+    <li>此刻，你「以為」你的心在哪裡？這個「以為」本身，是真心還是妄心？</li>
+  </ol>
+  <p class="note">經文依《大佛頂首楞嚴經》卷一「七處徵心」；解說參酌 萬佛聖城 宣化上人《楞嚴經淺釋》英譯本（BTTS, 2009）。© 寶嚴禪寺　課堂教學用。</p>
+</section>
+
+<!-- ============ 主張卡 ============ -->
+<section class="sheet">
+  <div class="secthead"><div class="t">主 張 卡　·　Ānanda’s Claims（發給各組）</div><div class="d">沿虛線剪下；每張代表阿難的一種說法。</div></div>
+  <div class="cards" id="claimCards"></div>
+</section>
+
+<!-- ============ 破斥卡 ============ -->
+<section class="sheet">
+  <div class="secthead"><div class="t">破 斥 卡　·　The Buddha’s Refutations（老師保管，對答案用）</div><div class="d">沿虛線剪下；與同號主張卡配對。</div></div>
+  <div class="cards" id="refuteCards"></div>
+</section>
+
+<script>
+const NUM = ["一","二","三","四","五","六","七"];
+const P = [
+  { name:"心在身內", en:"The Mind Is Inside the Body",
+    sutra:"阿難：「識心實居身內。」",
+    claim:{zh:"能知覺的心，住在身體之內。眼睛長在臉上，心也理當在身內。", en:"The conscious mind dwells inside the body."},
+    refute:{zh:"心若在身內，應先見體內——心肝脾胃、指甲生長、筋脈跳動。你既向內一無所見，可知心不在身內。", en:"If inside, it would see your innards first. It can’t—so it isn’t inside."},
+    verdict:"住在身內 · 無有是處", key:"不見身內 → 心不在內" },
+  { name:"心在身外", en:"The Mind Is Outside the Body",
+    sutra:"阿難：「覺了能知之心，住在身外。」",
+    claim:{zh:"既看不見身內，心應在身外；如燈在室外，只照得到外面。", en:"The mind is outside—like a lamp outside a room."},
+    refute:{zh:"心若在外，身心便互不相干。但佛一舉手、眼一見，心立刻分別得知——身心相知，故心不在外。", en:"If outside, body & mind would be unrelated. Yet they perceive together—so not outside."},
+    verdict:"住在身外 · 無有是處", key:"身心相知 → 心不在外" },
+  { name:"心潛眼根", en:"Hidden in the Eyes",
+    sutra:"阿難：「潛伏根裡，如琉璃合。」",
+    claim:{zh:"心藏在眼根裡；如琉璃罩眼，不礙看外，故見外不見內。", en:"The mind hides in the eyes, like crystal cups over them."},
+    refute:{zh:"戴琉璃時也看得見琉璃。心若如琉璃在眼，看外境就該看見自己的眼；你卻看不見自眼，故心不潛眼根。", en:"You’d then see your own eyes—but you can’t. So not in the eyes."},
+    verdict:"潛伏根裡 · 無有是處", key:"不見自眼 → 心不潛眼" },
+  { name:"閉眼見暗即見內", en:"Seeing Darkness = Seeing Within",
+    sutra:"阿難：「閉眼見暗，名為見內。」",
+    claim:{zh:"臟腑在內幽暗，孔竅向外明亮。開眼見明叫見外，閉眼見暗叫見內。", en:"Eyes closed → darkness → ‘seeing inside.’"},
+    refute:{zh:"暗若在眼前就不算內；暗即是內，則暗室滿室黑暗豈非都成你五臟？又閉眼能見內，開眼就該見己面——你卻見不到。", en:"Eyes open you can’t see your own face—so darkness isn’t ‘within.’"},
+    verdict:"見暗名見內 · 無有是處", key:"不能返見己面 → 見暗非見內" },
+  { name:"隨所合處心則隨有", en:"Arises Wherever It Combines",
+    sutra:"阿難：「隨所合處，心則隨有。」",
+    claim:{zh:"心隨外境和合而生；我這能思惟的，正是隨所合處、心便隨有，不固定一處。", en:"The mind arises by combining with objects, wherever they arise."},
+    refute:{zh:"無自體則無物可合；有自體則：捏身覺痛，心從內出該見內、從外入該見面（皆已破）；一體遍身捏一處應全身覺。處處矛盾。", en:"No nature → nothing to combine; has nature → the pinch test fails inside/outside. Contradictions."},
+    verdict:"隨所合而有 · 無有是處", key:"隨合無定體 → 了不可得" },
+  { name:"心在中間", en:"In the Middle",
+    sutra:"阿難：「眼色為緣……心在中間。」",
+    claim:{zh:"心既不在內也不在外，應在「中間」——在眼根與外境之間，眼識生起之處。", en:"The mind is between the eye-faculty and its object."},
+    refute:{zh:"「中」須有定處：在身表偏外、在身內同內。又心介於能知的根與無知的境：同二者則知與不知混雜矛盾，異二者則非知非不知、根本無體。", en:"A ‘middle’ has no fixed place; between aware & unaware it’s either contradictory or has no nature."},
+    verdict:"心在中間 · 無有是處", key:"中無定處 → 非在中間" },
+  { name:"一切無著名之為心", en:"Located Nowhere / Non-Attachment",
+    sutra:"阿難：「一切無著，名之為心。」",
+    claim:{zh:"這分別覺知的心，不在內外中間，俱無所在；那麼「一切無所執著」就叫做我的心。", en:"‘Non-attachment to anything’ itself is the mind."},
+    refute:{zh:"世間萬物皆有所在。此心是有是無？無則如龜毛兔角、根本不存在；有則有相，有相必有處。「無著」仍肯定一個有相之物，依舊落於有處，自相矛盾。", en:"If nowhere, it’s like turtle-fur; if it exists, it has attributes & a location. Either way ‘nowhere’ fails."},
+    verdict:"都無所在 · 無有是處", key:"有相必有處 → 無著亦不可得" }
+];
+
+function claimCard(p,i){
+  return `<div class="card claim">
+    <span class="corner">第${NUM[i]}處 · ${i+1}/7</span>
+    <span class="tag">阿難 主張 ÁNANDA</span>
+    <div class="nm">${p.name}<span class="en">${p.en}</span></div>
+    <div class="sutra">${p.sutra}</div>
+    <div class="body">${p.claim.zh}<span class="en">${p.claim.en}</span></div>
+    <div class="ask">？ 世尊會怎麼破 ·  How will the Buddha refute this?</div>
+  </div>`;
+}
+function refuteCard(p,i){
+  return `<div class="card refute">
+    <span class="corner">第${NUM[i]}處 · ${i+1}/7</span>
+    <span class="tag">世尊 破斥 BUDDHA</span>
+    <div class="nm">${p.name}<span class="en">${p.en}</span></div>
+    <div class="body">${p.refute.zh}<span class="en">${p.refute.en}</span></div>
+    <div class="verdict">判：${p.verdict}</div>
+    <div class="key">🔑 ${p.key}</div>
+  </div>`;
+}
+document.getElementById("claimCards").innerHTML = P.map(claimCard).join("");
+document.getElementById("refuteCards").innerHTML = P.map(refuteCard).join("");
+</script>
+</body>
+</html>
