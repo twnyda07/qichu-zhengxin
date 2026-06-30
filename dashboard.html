@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>七處徵心 · 學習儀表板 — 楞嚴經</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=LXGW+WenKai+TC:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#fffdf9; --panel:#ffffff; --line:#efe7dc; --line2:#f4eee4;
+    --ink:#544a42; --ink2:#8c8076; --ink-soft:#aaa094;
+    --pink:#e87399; --gold:#d9962a; --jade:#3fa377; --sky:#5aa7d6;
+    --shadow:0 6px 20px rgba(150,120,90,.09);
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{
+    font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif;
+    color:var(--ink); background:var(--bg); line-height:1.7; font-size:15px;
+    padding:22px 18px 60px; -webkit-font-smoothing:antialiased;
+  }
+  .head-font{font-family:"LXGW WenKai TC","Noto Sans TC",sans-serif;}
+  .wrap{max-width:1080px; margin:0 auto;}
+  body.lang-zh .en{display:none!important;}
+  body.lang-en .zh{display:none!important;}
+  a{color:inherit;}
+
+  /* 頂列 */
+  .topbar{display:flex; align-items:center; justify-content:space-between; gap:14px; flex-wrap:wrap; margin-bottom:6px;}
+  .brand .t{font-family:"LXGW WenKai TC","Noto Sans TC",sans-serif; font-size:27px; font-weight:700; color:#6b4a3a; letter-spacing:.03em;}
+  .brand .t .em{color:var(--pink);}
+  .brand .s{font-size:13px; color:var(--ink2); letter-spacing:.06em; margin-top:2px;}
+  .tools{display:flex; gap:8px; align-items:center; flex-wrap:wrap;}
+  .seg{display:inline-flex; border:1.5px solid var(--line); border-radius:24px; overflow:hidden; background:#fff;}
+  .seg button{appearance:none; border:none; background:transparent; color:var(--ink2); font-family:inherit; font-size:13px; padding:7px 14px; cursor:pointer; font-weight:700;}
+  .seg button.on{background:var(--pink); color:#fff;}
+  .lnk{display:inline-flex; align-items:center; gap:6px; text-decoration:none; font-size:13.5px; font-weight:700; color:var(--ink);
+    padding:8px 15px; border-radius:22px; border:1.5px solid var(--line); background:#fff; transition:.15s;}
+  .lnk:hover{border-color:var(--pink); color:var(--pink);}
+  .lnk.go{background:var(--pink); color:#fff; border-color:var(--pink);}
+  .lnk.go:hover{background:#dd5c87; color:#fff;}
+
+  .lead{font-size:15px; color:var(--ink2); margin:14px 2px 18px; line-height:1.8;}
+  .lead b{color:var(--gold);}
+
+  /* KPI */
+  .kpis{display:grid; grid-template-columns:repeat(4,1fr); gap:14px; margin-bottom:20px;}
+  .kpi{background:var(--panel); border:1.5px solid var(--line); border-radius:18px; padding:16px 16px; box-shadow:var(--shadow);}
+  .kpi .big{font-family:"LXGW WenKai TC",sans-serif; font-size:30px; font-weight:700; line-height:1; color:#6b4a3a;}
+  .kpi .big small{font-size:15px; color:var(--ink2);}
+  .kpi .lab{font-size:13px; color:var(--ink2); margin-top:7px;}
+  .kpi .lab .en{display:block; font-size:11.5px; color:var(--ink-soft);}
+  .kpi.c1 .big{color:var(--gold);} .kpi.c2 .big{color:var(--sky);} .kpi.c3 .big{color:var(--jade);} .kpi.c4 .big{color:var(--pink);}
+
+  /* 主格 */
+  .grid{display:grid; grid-template-columns:1fr 1fr; gap:18px; margin-bottom:20px;}
+  .panel{background:var(--panel); border:1.5px solid var(--line); border-radius:20px; padding:18px 20px; box-shadow:var(--shadow);}
+  .panel h2{font-family:"LXGW WenKai TC",sans-serif; font-size:18px; color:#6b4a3a; margin-bottom:4px; display:flex; align-items:center; gap:8px;}
+  .panel h2 .en{font-size:12px; color:var(--ink-soft); font-weight:400;}
+  .panel .sub{font-size:12.5px; color:var(--ink2); margin-bottom:12px;}
+
+  /* 身像地圖 */
+  .map-wrap{display:flex; gap:14px; align-items:center;}
+  .map-wrap svg{width:160px; height:160px; flex:0 0 auto;}
+  .map-legend{display:flex; flex-direction:column; gap:6px; font-size:13px;}
+  .map-legend button{appearance:none; border:none; background:transparent; font-family:inherit; cursor:pointer; text-align:left;
+    display:flex; align-items:center; gap:8px; color:var(--ink); padding:3px 6px; border-radius:8px; transition:.12s; width:100%;}
+  .map-legend button:hover{background:#fbf4ea;}
+  .map-legend .mk{width:20px; height:20px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:700; color:#fff; flex:0 0 auto;}
+  .map-legend b{font-weight:700;} .map-legend .pos{color:var(--ink2); font-size:12px;}
+  .mk-svg{cursor:pointer;}
+
+  /* 流程 */
+  .flow{display:flex; flex-wrap:wrap; gap:7px; align-items:center; margin-top:2px;}
+  .flow .step{display:inline-flex; align-items:center; gap:6px; background:#fbf4ea; border:1.5px solid var(--line); border-radius:20px; padding:6px 12px; font-size:13px; cursor:pointer; transition:.12s;}
+  .flow .step:hover{border-color:var(--pink); background:#fff;}
+  .flow .step .n{width:18px; height:18px; border-radius:50%; color:#fff; font-size:11px; font-weight:700; display:flex; align-items:center; justify-content:center;}
+  .flow .arr{color:var(--ink-soft); font-size:13px;}
+  .flow .end{background:linear-gradient(180deg,#fff0d6,#ffe2b0); border-color:#f0cf8f; font-weight:700; color:#8a5a1a;}
+  .flow .true{background:linear-gradient(180deg,#ffe3ee,#ffd0e2); border-color:#f6b8d0; font-weight:700; color:var(--pink);}
+
+  /* 妄真對照 */
+  .compare{display:grid; grid-template-columns:1fr 1fr; gap:12px;}
+  .cmp{border-radius:16px; padding:14px; border:1.5px solid;}
+  .cmp.false{background:#fdf1ee; border-color:#f6d6cd;}
+  .cmp.true{background:#eef8f2; border-color:#c8ecd7;}
+  .cmp .h{font-family:"LXGW WenKai TC",sans-serif; font-size:16px; font-weight:700; margin-bottom:8px;}
+  .cmp.false .h{color:#d8694f;} .cmp.true .h{color:var(--jade);}
+  .cmp ul{list-style:none; display:flex; flex-direction:column; gap:6px;}
+  .cmp li{font-size:13px; padding-left:18px; position:relative; line-height:1.6;}
+  .cmp li::before{position:absolute; left:0; top:0;}
+  .cmp.false li::before{content:"✕"; color:#e3604f; font-weight:700;}
+  .cmp.true li::before{content:"✓"; color:var(--jade); font-weight:700;}
+  .cmp-note{margin-top:12px; font-size:13px; color:var(--ink2); background:#fff8ee; border:1.5px dashed #f0d9b4; border-radius:12px; padding:10px 12px;}
+  .cmp-note b{color:var(--pink);}
+
+  /* 七卡 */
+  .sec-title{font-family:"LXGW WenKai TC",sans-serif; font-size:19px; color:#6b4a3a; margin:6px 2px 12px; display:flex; align-items:center; gap:8px;}
+  .sec-title .en{font-size:12.5px; color:var(--ink-soft); font-weight:400;}
+  .cards{display:grid; grid-template-columns:repeat(auto-fill,minmax(245px,1fr)); gap:14px;}
+  .pcard{background:var(--panel); border:1.5px solid var(--line); border-radius:18px; overflow:hidden; box-shadow:var(--shadow); transition:.15s; display:flex; flex-direction:column;}
+  .pcard:hover{transform:translateY(-3px); box-shadow:0 12px 26px rgba(150,120,90,.16);}
+  .pcard.flash{animation:flash 1.1s ease;}
+  @keyframes flash{0%,100%{box-shadow:var(--shadow);}30%{box-shadow:0 0 0 3px var(--hi), 0 12px 26px rgba(150,120,90,.2);}}
+  .pc-head{display:flex; align-items:center; gap:10px; padding:12px 14px; background:var(--tint);}
+  .pc-num{width:30px; height:30px; border-radius:50%; background:var(--hi); color:#fff; font-weight:700; font-size:15px; display:flex; align-items:center; justify-content:center; flex:0 0 auto;}
+  .pc-name{font-family:"LXGW WenKai TC",sans-serif; font-size:17px; font-weight:700; color:#5a3f30; line-height:1.25;}
+  .pc-en{font-size:11px; color:var(--ink2); margin-top:1px;}
+  .pc-body{padding:12px 14px 6px; flex:1;}
+  .pc-row{margin-bottom:9px;}
+  .pc-row .lbl{display:inline-block; font-size:11px; font-weight:700; color:#fff; border-radius:10px; padding:1px 8px; margin-right:6px; vertical-align:1.5px;}
+  .pc-row.claim .lbl{background:var(--sky);} .pc-row.ref .lbl{background:var(--hi);}
+  .pc-row .tx{font-size:13.5px; color:var(--ink); line-height:1.65;}
+  .pc-foot{padding:9px 14px 13px; border-top:1px dashed var(--line); display:flex; flex-direction:column; gap:6px;}
+  .pc-verdict{align-self:flex-start; font-size:11.5px; font-weight:700; color:#fff; background:linear-gradient(180deg,#f7a499,#e3604f); border-radius:14px; padding:3px 11px;}
+  .pc-key{font-size:13px; font-weight:700; color:var(--hi);}
+
+  footer{margin-top:26px; text-align:center; color:var(--ink-soft); font-size:12.5px; line-height:1.9;}
+  footer a{color:var(--pink); font-weight:700; text-decoration:none;}
+
+  @media(max-width:820px){
+    .kpis{grid-template-columns:repeat(2,1fr);}
+    .grid{grid-template-columns:1fr;}
+  }
+  @media(max-width:480px){
+    .map-wrap{flex-direction:column; align-items:flex-start;}
+    .compare{grid-template-columns:1fr;}
+  }
+</style>
+</head>
+<body class="lang-both">
+<div class="wrap">
+
+  <!-- 頂列 -->
+  <div class="topbar">
+    <div class="brand">
+      <div class="t head-font">🪷 七處<span class="em">徵心</span> · 學習儀表板</div>
+      <div class="s">Where Is the Mind? — Learning Dashboard　·　《楞嚴經》卷一　寶嚴禪寺</div>
+    </div>
+    <div class="tools">
+      <div class="seg" id="langSeg">
+        <button data-lang="both" class="on">雙語</button>
+        <button data-lang="zh">中文</button>
+        <button data-lang="en">EN</button>
+      </div>
+      <a class="lnk go" href="index.html">▶ <span class="zh">玩互動遊戲</span><span class="en">Play</span></a>
+      <a class="lnk" href="print.html">🖨️ <span class="zh">列印版</span><span class="en">Print</span></a>
+    </div>
+  </div>
+
+  <p class="lead">
+    <span class="zh">佛問阿難：「唯心與目，今何所在？」阿難七度指出心的所在，世尊七度破之，最後皆「<b>無有是處</b>」——心了不可得。一頁看懂這場論辯的全貌。</span>
+    <span class="en">The Buddha asked Ānanda where his mind is. Seven times Ānanda names a location; seven times the Buddha shows it is <b>impossible</b>. The whole debate, at a glance.</span>
+  </p>
+
+  <!-- KPI -->
+  <div class="kpis">
+    <div class="kpi c1"><div class="big">7<small> 處</small></div><div class="lab zh">阿難所指的位置</div><div class="lab en">locations proposed</div></div>
+    <div class="kpi c2"><div class="big">7<small> 破</small></div><div class="lab zh">世尊逐一破斥</div><div class="lab en">all refuted</div></div>
+    <div class="kpi c3"><div class="big">0<small> 處可得</small></div><div class="lab zh">七處皆非</div><div class="lab en">none holds up</div></div>
+    <div class="kpi c4"><div class="big head-font" style="font-size:22px">破妄顯真</div><div class="lab zh">全段要旨</div><div class="lab en">break the false → reveal the true</div></div>
+  </div>
+
+  <!-- 主格：地圖 + 對照 -->
+  <div class="grid">
+    <div class="panel">
+      <h2>🧭 心在哪裡？<span class="en">Where was it searched?</span></h2>
+      <div class="sub zh">七個被指認的位置，逐一被排除。點圖上的點或下方項目，看對應的一處。</div>
+      <div class="sub en" style="display:none">Seven proposed spots, each ruled out. Tap a dot or a row to jump to that search.</div>
+      <div class="map-wrap">
+        <div id="map"></div>
+        <div class="map-legend" id="legend"></div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2>🔍 破的是哪種心？<span class="en">Which mind?</span></h2>
+      <div class="sub zh">七處所指的，都是會生滅的「妄心」；要顯的是不生滅的「真心」。</div>
+      <div class="sub en" style="display:none">All seven point to the perishable false mind; the goal is the everlasting true mind.</div>
+      <div class="compare">
+        <div class="cmp false">
+          <div class="h zh">妄心 · 緣塵分別</div><div class="h en" style="display:none">False mind</div>
+          <ul>
+            <li class="zh">隨外境生、隨外境滅</li><li class="en" style="display:none">Arises & ceases with objects</li>
+            <li class="zh">七處遍尋，了不可得</li><li class="en" style="display:none">Sought in 7 places—found nowhere</li>
+            <li class="zh">阿難誤認的「我心」</li><li class="en" style="display:none">What Ānanda mistook for “my mind”</li>
+          </ul>
+        </div>
+        <div class="cmp true">
+          <div class="h zh">真心 · 常住性淨</div><div class="h en" style="display:none">True mind</div>
+          <ul>
+            <li class="zh">不生不滅、常住</li><li class="en" style="display:none">Neither arises nor ceases</li>
+            <li class="zh">性淨明體、本自具足</li><li class="en" style="display:none">Pure, bright, complete in itself</li>
+            <li class="zh">破妄之後方能顯現</li><li class="en" style="display:none">Revealed once the false is dissolved</li>
+          </ul>
+        </div>
+      </div>
+      <div class="cmp-note">
+        <span class="zh">宣化上人：阿難把生滅的妄心當作真心，正是 <b>「認賊為子」</b>。</span>
+        <span class="en">Master Hsüan Hua: mistaking the false mind for the true is <b>“taking a burglar for one’s own child.”</b></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 流程 -->
+  <div class="panel" style="margin-bottom:22px;">
+    <h2>🔗 論辯流程<span class="en">The flow</span></h2>
+    <div class="sub zh">阿難依序提出七個位置，每一個都被判「無有是處」，最終翻出真心。</div>
+    <div class="sub en" style="display:none">Seven proposals in order, each ruled impossible, finally turning to the true mind.</div>
+    <div class="flow" id="flow"></div>
+  </div>
+
+  <!-- 七卡 -->
+  <div class="sec-title head-font">📇 七處徵心 · 逐處一覽<span class="en">All seven at a glance</span></div>
+  <div class="cards" id="cards"></div>
+
+  <footer>
+    經文依《大佛頂首楞嚴經》卷一「七處徵心」；解說參酌 萬佛聖城 宣化上人《楞嚴經淺釋》英譯本（BTTS, 2009）。<br>
+    <a href="index.html">▶ 互動遊戲</a>　·　<a href="print.html">🖨️ 列印版／老師手冊</a>　·　© 寶嚴禪寺　課堂教學用
+  </footer>
+</div>
+
+<script>
+const NUM=["一","二","三","四","五","六","七"];
+const P=[
+ {n:1,name:"心在身內",en:"Inside the Body",pos:"身內",claim:"心住在身體裡。",
+  refute:"若在內，應先見心肝脾胃；既不見，故不在內。",verdict:"住在身內·無有是處",key:"不見身內 → 不在內",
+  hi:"#e8965a",tint:"#fff1e6",mk:[100,150]},
+ {n:2,name:"心在身外",en:"Outside the Body",pos:"身外",claim:"如燈照室外，心在身外。",
+  refute:"佛舉手、眼見心即知；身心相知，故不在外。",verdict:"住在身外·無有是處",key:"身心相知 → 不在外",
+  hi:"#d9962a",tint:"#fff6e2",mk:[170,118]},
+ {n:3,name:"心潛眼根",en:"Hidden in the Eyes",pos:"眼根",claim:"如琉璃罩眼，心藏眼裡。",
+  refute:"戴琉璃應見自眼；卻看不見自眼，故不潛眼。",verdict:"潛伏根裡·無有是處",key:"不見自眼 → 不潛眼",
+  hi:"#3fa377",tint:"#e9f7ef",mk:[100,52]},
+ {n:4,name:"閉眼見暗即見內",en:"Darkness = Within",pos:"明暗",claim:"閉眼見暗，名為見內。",
+  refute:"開眼不能返見己面，故見暗非見內。",verdict:"見暗名見內·無有是處",key:"見暗 ≠ 見內",
+  hi:"#3f9aa3",tint:"#e6f5f6",mk:[126,44]},
+ {n:5,name:"隨所合處心則隨有",en:"Wherever It Combines",pos:"合處",claim:"心隨外境和合而生。",
+  refute:"無體則不能合；有體則內外已破。捏身覺痛從何來？",verdict:"隨所合·無有是處",key:"隨合無定體 → 了不可得",
+  hi:"#5aa7d6",tint:"#e6f1fb",mk:[58,168]},
+ {n:6,name:"心在中間",en:"In the Middle",pos:"中間",claim:"心在眼根與外境之間。",
+  refute:"中無定處；兼「知與不知」則自相矛盾，故非中間。",verdict:"心在中間·無有是處",key:"中無定處 → 非中間",
+  hi:"#8a78d6",tint:"#eee9fb",mk:[140,86]},
+ {n:7,name:"一切無著名之為心",en:"Located Nowhere",pos:"無處",claim:"俱無所在，即是我心。",
+  refute:"無則如龜毛兔角；有則有相必有處。故無著亦不可得。",verdict:"都無所在·無有是處",key:"有相必有處 → 不可得",
+  hi:"#e87399",tint:"#ffe7f0",mk:[100,112]}
+];
+
+/* 身像地圖 SVG */
+function buildMap(){
+  let dots="";
+  P.forEach(p=>{
+    const [x,y]=p.mk;
+    dots+=`<g class="mk-svg" data-n="${p.n}">
+      <circle cx="${x}" cy="${y}" r="13" fill="${p.hi}" stroke="#fff" stroke-width="2.5"/>
+      <text x="${x}" y="${y+4.5}" text-anchor="middle" font-size="13" font-weight="700" fill="#fff" font-family="sans-serif">${p.n}</text></g>`;
+  });
+  document.getElementById("map").innerHTML=`<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+    <defs><linearGradient id="b" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffd9c2"/><stop offset="1" stop-color="#f7b79a"/></linearGradient></defs>
+    <g fill="#ffd6e3" stroke="#f59bb6" stroke-width="1.4" stroke-linejoin="round">
+      <path d="M52 188 Q60 172 78 180 Q70 192 56 192 Z"/><path d="M148 188 Q140 172 122 180 Q130 192 144 192 Z"/><path d="M74 190 Q82 168 100 176 Q118 168 126 190 Z"/></g>
+    <g stroke="#e8a98c" stroke-width="2.2" stroke-linejoin="round">
+      <path d="M58 154 Q60 100 100 94 Q140 100 142 154 Q100 172 58 154 Z" fill="url(#b)"/>
+      <circle cx="100" cy="48" r="26" fill="#ffe1cf"/></g>
+    <g fill="#c97b5a"><circle cx="91" cy="48" r="2.2"/><circle cx="109" cy="48" r="2.2"/></g>
+    <path d="M93 56 Q100 60 107 56" fill="none" stroke="#c97b5a" stroke-width="1.8" stroke-linecap="round"/>
+    ${dots}
+  </svg>`;
+  document.querySelectorAll("#map .mk-svg").forEach(g=>g.addEventListener("click",()=>flashCard(+g.dataset.n)));
+}
+
+/* 圖例 */
+function buildLegend(){
+  document.getElementById("legend").innerHTML=P.map(p=>
+    `<button data-n="${p.n}"><span class="mk" style="background:${p.hi}">${p.n}</span>
+      <span><b>${p.name}</b> <span class="pos">· ${p.pos}</span></span></button>`).join("");
+  document.querySelectorAll("#legend button").forEach(b=>b.addEventListener("click",()=>flashCard(+b.dataset.n)));
+}
+
+/* 流程鏈 */
+function buildFlow(){
+  let h="";
+  P.forEach((p,i)=>{
+    h+=`<span class="step" data-n="${p.n}"><span class="n" style="background:${p.hi}">${p.n}</span>${p.pos}</span>`;
+    if(i<P.length-1) h+=`<span class="arr">→</span>`;
+  });
+  h+=`<span class="arr">⇒</span><span class="step end">七處皆非</span><span class="arr">→</span><span class="step true">🪷 顯真心</span>`;
+  document.getElementById("flow").innerHTML=h;
+  document.querySelectorAll("#flow .step[data-n]").forEach(b=>b.addEventListener("click",()=>flashCard(+b.dataset.n)));
+}
+
+/* 七卡 */
+function buildCards(){
+  document.getElementById("cards").innerHTML=P.map(p=>`
+    <div class="pcard" id="card${p.n}" style="--hi:${p.hi};--tint:${p.tint}">
+      <div class="pc-head">
+        <span class="pc-num">${p.n}</span>
+        <div><div class="pc-name">${p.name}</div><div class="pc-en">第${NUM[p.n-1]}處 · ${p.en}</div></div>
+      </div>
+      <div class="pc-body">
+        <div class="pc-row claim"><span class="lbl">阿難</span><span class="tx">${p.claim}</span></div>
+        <div class="pc-row ref"><span class="lbl">佛破</span><span class="tx">${p.refute}</span></div>
+      </div>
+      <div class="pc-foot">
+        <span class="pc-verdict">${p.verdict}</span>
+        <span class="pc-key">🔑 ${p.key}</span>
+      </div>
+    </div>`).join("");
+}
+
+function flashCard(n){
+  const c=document.getElementById("card"+n);
+  if(!c) return;
+  c.scrollIntoView({behavior:"smooth",block:"center"});
+  c.classList.remove("flash"); void c.offsetWidth; c.classList.add("flash");
+}
+
+document.querySelectorAll("#langSeg button").forEach(b=>b.addEventListener("click",()=>{
+  document.querySelectorAll("#langSeg button").forEach(x=>x.classList.remove("on"));
+  b.classList.add("on"); document.body.className="lang-"+b.dataset.lang;
+}));
+
+buildMap(); buildLegend(); buildFlow(); buildCards();
+</script>
+</body>
+</html>
