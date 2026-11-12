@@ -187,6 +187,17 @@
     h1{font-size:29px;} .place-h .nm{font-size:21px;}
     .modebtns .btn{min-width:0; width:100%;}
   }
+
+  /* 本站資訊（寶嚴禪寺所有開發一律附） */
+  .siteinfo{margin:30px auto 0; width:100%; max-width:640px; text-align:left; font-size:16px; line-height:1.85;
+    color:var(--ink); background:var(--paper); border:1px solid var(--line); border-radius:6px; padding:16px 20px;}
+  .siteinfo .si-h{color:#b23a63; font-weight:700; letter-spacing:.12em; margin-bottom:6px;}
+  .siteinfo dl{display:grid; grid-template-columns:max-content 1fr; gap:4px 12px; margin:0;}
+  .siteinfo dt{color:var(--ink); white-space:nowrap;}
+  .siteinfo dd{margin:0; word-break:break-word;}
+  .siteinfo a{color:#b23a63; text-decoration:underline; text-underline-offset:3px; display:inline-block; padding:6px 0; margin:-6px 0;}
+  @media(max-width:420px){ .siteinfo dl{grid-template-columns:1fr; gap:0;} .siteinfo dd{margin-bottom:6px;} }
+
 </style>
 </head>
 <body class="lang-both">
@@ -313,9 +324,19 @@
 
   <footer>
     經文與義理依《大佛頂首楞嚴經》卷一「七處徵心」，<br>
-    解說參酌 萬佛聖城 宣化上人《楞嚴經淺釋》英譯本（Buddhist Text Translation Society, 2009）。<br>
-    © 寶嚴禪寺　Baoyan Chan Monastery
+    解說參酌 萬佛聖城 宣化上人《楞嚴經淺釋》英譯本（Buddhist Text Translation Society, 2009）。
   </footer>
+
+<section class="siteinfo" aria-label="本站資訊">
+  <div class="si-h">本站資訊</div>
+  <dl>
+    <dt>名稱：</dt><dd>七處徵心・Where Is the Mind?</dd>
+    <dt>網址：</dt><dd><a href="https://twnyda07.github.io/qichu-zhengxin/">twnyda07.github.io/qichu-zhengxin</a></dd>
+    <dt>特別功能：</dt><dd>中英雙語，可切換中文、英文或雙語；講解模式適合老師帶讀，闖關模式可分組搶答，選出佛陀的破斥；另有學習儀表板，一頁看懂七處。</dd>
+    <dt>創作者／版權所有：</dt><dd>© 2026 寶嚴山寶嚴禪寺　保留一切權利</dd>
+  </dl>
+</section>
+
 </div>
 
 <script>
